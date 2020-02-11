@@ -1,5 +1,6 @@
 package setupView;
 
+import game.GameSetup;
 import unit.Unit;
 import common.Position;
 import game.Game;
@@ -16,9 +17,9 @@ import javafx.scene.layout.GridPane;
 public class SetupPresenter {
 
     private SetupView view;
-    private Game model;
+    private GameSetup model;
 
-    public SetupPresenter(SetupView view, Game model) {
+    public SetupPresenter(SetupView view, GameSetup model) {
         this.view = view;
         this.model = model;
         addEventHandlers();
@@ -34,11 +35,14 @@ public class SetupPresenter {
                             int x = GridPane.getColumnIndex(btn);
                             int y = GridPane.getRowIndex(btn);
                             Unit unitToPlace = view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem();
-                            model.placeUnit(unitToPlace, x, y);
+                            model.setUnitPosition(unitToPlace, x, y);
                             ((Button) btn).setText(view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem().getRank().name());
                             btn.setDisable(true);
                             btn.setOpacity(100);
                             updateView();
+                            if (model.isSetupDone()) {
+                                //transition to Game phase
+                            }
                         }
                     });
             }

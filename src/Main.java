@@ -1,4 +1,5 @@
 import game.Game;
+import game.GameSetup;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -13,7 +14,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Game model = new Game();
+        GameSetup model = new GameSetup();
         SetupView view = new SetupView();
         SetupPresenter presenter = new SetupPresenter(view, model);
         Scene scene = new Scene(presenter.getView());

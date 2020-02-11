@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Unit implements Serializable {
 
-    static int ID;
+    static int ID = 1;
 
     private final Rank rank;
     private final UnitColor color;
@@ -16,7 +16,6 @@ public class Unit implements Serializable {
     private boolean alive = true;
     private int visibleForTurns = 0;
     private int id;
-    private boolean isPlaced = false;
 
     public Unit(Rank rank, UnitColor color) {
         this.rank = rank;
@@ -36,8 +35,8 @@ public class Unit implements Serializable {
         return color;
     }
 
-    public boolean isPlaced() {
-        return this.position != null;
+    public boolean isColor(UnitColor color) {
+        return this.color == color;
     }
 
     public void battle(Unit enemyUnit) {
@@ -68,7 +67,6 @@ public class Unit implements Serializable {
 
     public void place(Position position) {
         this.position = position;
-        isPlaced = true;
     }
 
     public int getX() {
