@@ -1,5 +1,4 @@
-/*
-package SetupView;
+package setupView;
 
 import unit.Unit;
 import common.Position;
@@ -29,24 +28,26 @@ public class SetupPresenter {
     private void addEventHandlers() {
         for (Node btn : view.getBoard().getChildren()) {
             if (GridPane.getRowIndex(btn) > 5) {
-                btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent mouseEvent) {
-                        int x = GridPane.getColumnIndex(btn);
-                        int y = GridPane.getRowIndex(btn);
-                        Unit unitToPlace = view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem();
-                        model.placeUnit(unitToPlace, new Position(x, y));
-                        ((Button) btn).setText(view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem().getRank().name());
-                        updateView();
-                    }
-                });
+                    btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent mouseEvent) {
+                            int x = GridPane.getColumnIndex(btn);
+                            int y = GridPane.getRowIndex(btn);
+                            Unit unitToPlace = view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem();
+                            model.placeUnit(unitToPlace, x, y);
+                            ((Button) btn).setText(view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem().getRank().name());
+                            btn.setDisable(true);
+                            btn.setOpacity(100);
+                            updateView();
+                        }
+                    });
             }
         }
     }
 
     public void updateView() {
         ListView<Unit> units = view.getListOfUnplacedUnits();
-        ObservableList<Unit> obsList = FXCollections.observableArrayList(model.getArmyUnitsToPlace());
+        ObservableList<Unit> obsList = FXCollections.observableArrayList(model.getUnplacedUnits());
         units.setItems(obsList);
     }
 
@@ -54,4 +55,3 @@ public class SetupPresenter {
         return view;
     }
 }
-*/

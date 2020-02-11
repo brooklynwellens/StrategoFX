@@ -50,6 +50,10 @@ public class Board {
         return this.gameField[tilePosition.getX()][tilePosition.getY()].isOccupied();
     }
 
+    public boolean tileIsOccupiedWithCoordinates(int x, int y) {
+        return this.gameField[x][y].isOccupied();
+    }
+
     public boolean tileIsAccessible(Position tilePosition) {
         return this.gameField[tilePosition.getX()][tilePosition.getY()].isAccessible();
     }
@@ -78,5 +82,9 @@ public class Board {
 
     public Tile[][] getGameField() {
         return gameField;
+    }
+
+    public void setUnitIdOnTile(int id, int x, int y) {
+        this.gameField[x][y].setUnitId(id);
     }
 }
