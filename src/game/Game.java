@@ -5,11 +5,8 @@ import board.Board;
 import common.Position;
 import turn.Turn;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Game {
 
@@ -27,10 +24,13 @@ public class Game {
         }
     }
 
-    public void placeUnitOnBoard(Unit unit, int x, int y) {
-        board.setUnitIdOnTile(unit.getId(),x ,y);
+    public void moveUnit(Unit selectedUnit, Position destination) {
+
     }
 
+    public void computeValidMoves() {
+
+    }
 }
 
 

@@ -1,5 +1,6 @@
 package setupView;
 
+import javafx.scene.Node;
 import unit.Unit;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -24,15 +25,17 @@ public class SetupView extends BorderPane {
         for (int i = 0; i < paneRows; i++) {
             for (int j = 0; j < paneColums; j++) {
                 Button btn = new Button();
-                btn.setMinSize(100,100);
                 board.add(btn,i,j);
             }
         }
         listOfUnplacedUnits = new ListView<>();
-        listOfUnplacedUnits.setEditable(true);
     }
 
     private void layoutNodes() {
+        listOfUnplacedUnits.setEditable(true);
+        for (Node btn : this.board.getChildren()) {
+            ((Button)btn).setMinSize(100,100);
+        }
         this.setCenter(board);
         this.setRight(listOfUnplacedUnits);
     }

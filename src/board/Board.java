@@ -13,15 +13,14 @@ public class Board {
 
     public Board() {
         gameField = new Tile[WIDTH][HEIGHT];
-        initializeField();
+        initializeGameField();
     }
 
-    public void initializeField() {
+    private void initializeGameField() {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 if ((y == 4 || y == 5) && (x == 2 || x == 3 || x == 6 || x == 7)) {
-                    Tile waterTile = new Tile(Surface.WATER);
-                    gameField[x][y] = waterTile;
+                    gameField[x][y] = new Tile(Surface.WATER);
                     continue;
                 }
                 gameField[x][y] = new Tile(Surface.GRASS);
@@ -33,7 +32,7 @@ public class Board {
         return position.getX() >= 0 && position.getX() < WIDTH && position.getY() >= 0 && position.getY() < HEIGHT;
     }
 
-    public boolean positionsAreFree(List<Position> tilePositions) {
+    public boolean tilesAreFree(List<Position> tilePositions) {
         if (tilePositions.isEmpty()) {
             return true;
         }
@@ -78,10 +77,6 @@ public class Board {
         }
         destinationPath.remove(0);
         return destinationPath;
-    }
-
-    public Tile[][] getGameField() {
-        return gameField;
     }
 
     public void setUnitIdOnTile(int id, int x, int y) {
