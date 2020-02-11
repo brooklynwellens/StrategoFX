@@ -1,5 +1,5 @@
 package unit;
 
-public enum BattleResult {
+public enum ComparisonResult {
     WIN, LOSS, DRAW
 }

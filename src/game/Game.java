@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Game implements Serializable {
+public class Game {
 
-    static int maxTurnVisibilty = 3;
+    private static final int maxTurnVisibilty = 3;
 
     private ArrayList<Unit> units;
     private Board board;
@@ -27,8 +27,7 @@ public class Game implements Serializable {
         }
     }
 
-    public void placeUnit(Unit unit, int x, int y) {
-        unit.place(new Position(x, y));
+    public void placeUnitOnBoard(Unit unit, int x, int y) {
         board.setUnitIdOnTile(unit.getId(),x ,y);
     }
 

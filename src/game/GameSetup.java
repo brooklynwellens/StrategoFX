@@ -1,40 +1,47 @@
 package game;
 
 import common.Position;
-import javafx.geometry.Pos;
-import unit.Rank;
 import unit.Unit;
 import unit.UnitColor;
+import unit.UnitManager;
 
 import java.util.*;
 
 public class GameSetup {
 
     Map<Unit, Position> initialUnitPositions;
+    UnitManager unitManager;
 
     public GameSetup() {
+        unitManager = new UnitManager();
         initialUnitPositions = new TreeMap<>(new Comparator<Unit>() {
             @Override
             public int compare(Unit unit, Unit otherUnit) {
                 return unit.getId() - otherUnit.getId();
             }
         });
-        initializeUnits();
+        createInitialUnitPositions();
     }
 
-    private void initializeUnits() {
-        for (UnitColor unitColor : UnitColor.values()) {
-            for (Rank rank : Rank.values()) {
-                for (int i = 0; i < rank.getAmountOf(); i++) {
-                    if (unitColor == UnitColor.RED) {
-                        initialUnitPositions.put(new Unit(rank, unitColor), null);
-                    } else {
-                        initialUnitPositions.put(new Unit(rank, unitColor), null);
-                    }
-
-                }
+    private void createInitialUnitPositions() {
+        List<Unit> units = unitManager.getUnits();
+        for (Unit unit : units) {
+            if (unit.isColor(UnitColor.RED)) {
+                initialUnitPositions.put(unit, null); // generate position
+            } else {
+                initialUnitPositions.put(unit, null);
             }
         }
+    }
+
+    private boolean isValidStartingPosition(UnitColor color, Position position) {
+        if (color == UnitColor.RED) {
+            return position.getX() < 10 && position.getX() >= 0 && position.getY() >= 0 && position.getY() < 4;
+        }
+        if (color == UnitColor.BLUE) {
+            return position.getX() < 10 && position.getX() >= 0 && position.getY() >= 6 && position.getY() < 10;
+        }
+        return false;
     }
 
     private Position generateRandomPosition() {
@@ -58,16 +65,6 @@ public class GameSetup {
             return;
         }
         initialUnitPositions.replace(unit, position);
-    }
-
-    private boolean isValidStartingPosition(UnitColor color, Position position) {
-        if (color == UnitColor.RED) {
-            return position.getX() < 10 && position.getX() >= 0 && position.getY() >= 0 && position.getY() < 4;
-        }
-        if (color == UnitColor.BLUE) {
-            return position.getX() < 10 && position.getX() >= 0 && position.getY() >= 6 && position.getY() < 10;
-        }
-        return false;
     }
 
     public boolean isSetupDone() {
