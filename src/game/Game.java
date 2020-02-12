@@ -24,6 +24,9 @@ public class Game {
         }
     }
 
+    public void validateMove(Unit selectedUnit, Position destination) {
+    }
+
     public void moveUnit(Unit selectedUnit, Position destination) {
 
     }

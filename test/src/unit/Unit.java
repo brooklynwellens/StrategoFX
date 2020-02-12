@@ -11,6 +11,7 @@ public class Unit {
     private final UnitColor color;
     private boolean alive = true;
     private int id;
+    private Position position;
 
     public Unit(Rank rank, UnitColor color) {
         this.rank = rank;
@@ -34,6 +35,10 @@ public class Unit {
         return this.color == color;
     }
 
+    public void place(Position destination) {
+        this.position = destination;
+    }
+
     public void battle(Unit enemyUnit) {
         Rank enemyRank = enemyUnit.getRank();
         if (rank.compare(enemyRank) == ComparisonResult.WIN) {
@@ -55,10 +60,19 @@ public class Unit {
     }
 
     public boolean canReach(Position destination) {
-        return (destination.getX() <= this.rank.getMovementspeed() && destination.getY() == 0) || (destination.getY() <= this.rank.getMovementspeed() && destination.getX() == 0);
+        if ((destination.getX() <= this.rank.getMovementspeed() && destination.getY() == 0) || (destination.getY() <= this.rank.getMovementspeed() && destination.getX() == 0)) {
+            System.out.println("I CAN REACH");
+            return true;
+        }
+        System.out.println("I CANT REACH");
+        return false;
     }
 
     public String toString() {
         return String.format("%s - (%d) color: %s id: %d\n", this.rank.name(), this.rank.getStrength(),color,id);
+    }
+
+    public Position getPosition() {
+        return position;
     }
 }

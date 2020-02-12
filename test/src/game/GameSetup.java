@@ -20,16 +20,16 @@ public class GameSetup {
                 return unit.getId() - otherUnit.getId();
             }
         });
-        setInitialUnitPositions();
+        createInitialUnitPositions();
     }
 
-    private void setInitialUnitPositions() {
+    private void createInitialUnitPositions() {
         List<Unit> units = unitManager.getUnits();
         for (Unit unit : units) {
             if (unit.isColor(UnitColor.RED)) {
                 initialUnitPositions.put(unit, null); // generate position
             } else {
-                initialUnitPositions.put(unit, null);
+                initialUnitPositions.put(unit, new Position(9,9));
             }
         }
     }

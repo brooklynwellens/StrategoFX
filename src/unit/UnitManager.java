@@ -26,31 +26,23 @@ public class UnitManager {
             units.add(new Unit(Rank.Spy, unitColor));
             units.add(new Unit(Rank.General, unitColor));
             units.add(new Unit(Rank.Marshal, unitColor));
-            for (int i = 0; i < amountOfBombs; i++) {
-                units.add(new Unit(Rank.Bomb, unitColor));
-            }
-            for (int i = 0; i < amountOfScouts; i++) {
-                units.add(new Unit(Rank.Scout, unitColor));
-            }
-            for (int i = 0; i < amountOfMiners; i++) {
-                units.add(new Unit(Rank.Miner, unitColor));
-            }
-            for (int i = 0; i < amountOfSergeants; i++) {
-                units.add(new Unit(Rank.Sergeant, unitColor));
-            }
-            for (int i = 0; i < amountOfLieutenants; i++) {
-                units.add(new Unit(Rank.Lieutenant, unitColor));
-            }
-            for (int i = 0; i < amountOfCaptains; i++) {
-                units.add(new Unit(Rank.Captain, unitColor));
-            }
-            for (int i = 0; i < amountOfMajors; i++) {
-                units.add(new Unit(Rank.Major, unitColor));
-            }
-            for (int i = 0; i < amountOfColonels; i++) {
-                units.add(new Unit(Rank.Colonel, unitColor));
-            }
+            units.addAll(createUnits(Rank.Bomb, unitColor, amountOfBombs));
+            units.addAll(createUnits(Rank.Scout, unitColor, amountOfScouts));
+            units.addAll(createUnits(Rank.Miner, unitColor, amountOfMiners));
+            units.addAll(createUnits(Rank.Sergeant, unitColor, amountOfSergeants));
+            units.addAll(createUnits(Rank.Lieutenant, unitColor, amountOfLieutenants));
+            units.addAll(createUnits(Rank.Captain, unitColor, amountOfCaptains));
+            units.addAll(createUnits(Rank.Major, unitColor, amountOfMajors));
+            units.addAll(createUnits(Rank.Colonel, unitColor, amountOfColonels));
         }
+    }
+
+    private List<Unit> createUnits(Rank rank,UnitColor color, int amount) {
+        List<Unit> createdUnits = new ArrayList<>();
+        for (int i = 0; i < amount; i++) {
+            createdUnits.add(new Unit(rank, color));
+        }
+        return createdUnits;
     }
 
     public List<Unit> getUnits() {
