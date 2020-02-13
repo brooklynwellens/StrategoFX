@@ -42,9 +42,7 @@ public class Game {
     }
 
     public void processMove() {
-        validateMove();
-        moveUnit();
-        nextTurn();
+
     }
 
     public void moveUnit(int xPos, int yPos) {

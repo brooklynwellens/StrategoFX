@@ -2,22 +2,16 @@ package turn;
 
 import common.Position;
 import unit.Unit;
+import unit.UnitColor;
 
 public class Turn {
 
-    TurnType turnType;
     Unit selectedUnit;
-    Position position;
+    UnitColor turnType;
+    int xPos;
+    int yPos;
 
-    public Turn(TurnType turnType) {
-        this.turnType = turnType;
-    }
-
-    public TurnType getTurnType() {
-        return turnType;
-    }
-
-    public void setTurnType(TurnType turnType) {
+    public Turn(UnitColor turnType) {
         this.turnType = turnType;
     }
 
@@ -25,15 +19,32 @@ public class Turn {
         return selectedUnit;
     }
 
+    public int getxPos() {
+        return xPos;
+    }
+
+    public int getyPos() {
+        return yPos;
+    }
+
+    public boolean isType(UnitColor turnType) {
+        return this.turnType == turnType;
+    }
+
     public void setSelectedUnit(Unit selectedUnit) {
-        this.selectedUnit = selectedUnit;
+        if (selectedUnit.isColor(turnType)) {
+            this.selectedUnit = selectedUnit;
+            System.out.println("Selected: " + selectedUnit);
+        } else {
+            System.out.println("Not your unit!");
+        }
     }
 
-    public Position getPosition() {
-        return position;
+    public void setxPos(int xPos) {
+        this.xPos = xPos;
     }
 
-    public void setPosition(Position position) {
-        this.position = position;
+    public void setyPos(int yPos) {
+        this.yPos = yPos;
     }
 }

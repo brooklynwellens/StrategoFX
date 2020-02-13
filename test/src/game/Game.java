@@ -16,30 +16,37 @@ public class Game {
 
     private ArrayList<Unit> units;
     private Board board;
-    private Turn turn;
+    private Turn currentTurn;
 
     public Game() {
         board = new Board();
         units = new ArrayList<>();
-        units.add(new Unit(Rank.Colonel, UnitColor.BLUE));
+        currentTurn = new Turn(UnitColor.BLUE);
+        Unit testUnit = new Unit(Rank.Colonel, UnitColor.BLUE);
+        Unit testUnit2 = new Unit(Rank.Major, UnitColor.BLUE);
+        units.add(testUnit);
+        units.add(testUnit2);
+        board.setUnitIdOnTile(testUnit.getId(), 9,9);
+        board.setUnitIdOnTile(testUnit2.getId(),5,7);
     }
 
-    public void createTurn(int x, int y) {
-        Unit selectedUnit = getUnitById(board.getUnitIdOnTile(x,y));
-        turn = new Turn(TurnType.PLAYER);
-        turn.setSelectedUnit(selectedUnit);
-        turn.setPosition(new Position(x, y));
+    public void selectUnit(int xPos, int yPos) {
+        int unitId = board.getUnitIdOnTile(xPos, yPos);
+        Unit selectedUnit = getUnitById(unitId);
+        currentTurn.setSelectedUnit(selectedUnit);
+        currentTurn.setxPos(xPos);
+        currentTurn.setyPos(yPos);
     }
 
-    public void moveUnit(int desX, int desY) {
-        Position destination = new Position(desX, desY);
-        Unit selectedUnit = this.turn.getSelectedUnit();
-        if (selectedUnit.canReach(turn.getPosition().distanceTo(destination))) {
-            System.out.println("MOVED BABY");
-            selectedUnit.place(destination);
-            return;
-        }
-        System.out.println("NO ME GUSTA SENOR");
+    public void processMove() {
+
+    }
+
+    public void moveUnit(int xPos, int yPos) {
+        Unit selectedUnit = currentTurn.getSelectedUnit();
+        // validate
+        board.setUnitIdOnTile(xPos, yPos, selectedUnit.getId());
+
     }
 
     public void computeValidMoves() {
@@ -50,8 +57,9 @@ public class Game {
         return units.stream().filter(unit -> unit.getId() == unitId).findFirst().orElse(null);
     }
 
-    public Unit getUnitAtPosition(Position position) {
-        return units.stream().filter(unit -> unit.getPosition().equals(position)).findFirst().orElse(null);
+    public Unit getUnitOnTile(int xPos, int yPos) {
+        int unitId = board.getUnitIdOnTile(xPos, yPos);
+        return getUnitById(unitId);
     }
 }
 
