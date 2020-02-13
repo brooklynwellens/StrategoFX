@@ -64,7 +64,11 @@ public class Board {
         return destinationPath;
     }
 
-    public void setUnitIdOnTile(int id, int x, int y) {
+    public int getUnitIdOnTile(int x, int y) {
+        return this.gameField[x][y].getUnitId();
+    }
+
+    public void setUnitIdOnTile(int x, int y, int id) {
         this.gameField[x][y].setUnitId(id);
     }
 }

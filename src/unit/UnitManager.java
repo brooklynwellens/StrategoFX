@@ -13,7 +13,7 @@ public class UnitManager {
     private static final int amountOfCaptains = 4;
     private static final int amountOfMajors = 3;
     private static final int amountOfColonels = 2;
-    private List<Unit> units;
+    private ArrayList<Unit> units;
 
     public UnitManager() {
         units = new ArrayList<>();

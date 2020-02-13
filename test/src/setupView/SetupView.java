@@ -1,5 +1,6 @@
 package setupView;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import unit.Unit;
 import javafx.scene.control.Button;
@@ -32,6 +33,7 @@ public class SetupView extends BorderPane {
     }
 
     private void layoutNodes() {
+        board.setPadding(new Insets(10));
         listOfUnplacedUnits.setEditable(true);
         for (Node btn : this.board.getChildren()) {
             ((Button)btn).setMinSize(100,100);

@@ -54,8 +54,9 @@ public class Unit {
         alive = false;
     }
 
-    public boolean canReach(Position destination) {
-        return (destination.getX() <= this.rank.getMovementspeed() && destination.getY() == 0) || (destination.getY() <= this.rank.getMovementspeed() && destination.getX() == 0);
+    public boolean canReach(Position source, Position destination) {
+        Position distance = source.distanceTo(destination);
+        return (distance.getX() <= this.rank.getMovementspeed() && distance.getY() == 0) || (distance.getY() <= this.rank.getMovementspeed() && distance.getX() == 0);
     }
 
     public String toString() {

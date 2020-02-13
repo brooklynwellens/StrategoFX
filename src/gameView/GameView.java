@@ -37,4 +37,8 @@ public class GameView extends BorderPane {
         board.setPadding(new Insets(10));
         this.setCenter(board);
     }
+
+    protected GridPane getBoard() {
+        return board;
+    }
 }

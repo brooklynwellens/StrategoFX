@@ -2,7 +2,9 @@ package gameView;
 
 import common.Position;
 import game.Game;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -24,7 +26,16 @@ public class GamePresenter {
     }
 
     private void addEventHandlers() {
+        for (Node btn : view.getBoard().getChildren()) {
+            btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    int x = GridPane.getColumnIndex(btn);
+                    int y = GridPane.getRowIndex(btn);
 
+                }
+            });
+        }
     }
 
     private void updateView() {
