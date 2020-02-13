@@ -10,18 +10,16 @@ import java.util.Map;
 
 public class Game {
 
-    private static final int maxTurnVisibilty = 3;
-
     private ArrayList<Unit> units;
     private Board board;
     private Turn currentTurn;
     private ArrayList<Turn> turnHistory;
 
-    public Game(Map<Unit, Position> initalUnitPositions) {
+    public Game(Map<Unit, Position> initialUnitPositions) {
         board = new Board();
-        units = new ArrayList<>(initalUnitPositions.keySet());
-        for (Map.Entry<Unit, Position> entry : initalUnitPositions.entrySet()) {
-            board.setUnitIdOnTile(entry.getKey().getId(), entry.getValue().getX(), entry.getValue().getY());
+        units = new ArrayList<>(initialUnitPositions.keySet());
+        for (Map.Entry<Unit, Position> entry : initialUnitPositions.entrySet()) {
+            board.setUnitIdOnTile(entry.getValue(), entry.getKey().getId());
         }
         turnHistory = new ArrayList<>();
         currentTurn = new Turn(UnitColor.BLUE);
@@ -34,28 +32,37 @@ public class Game {
     }
 
     public void selectUnit(int xPos, int yPos) {
-        int unitId = board.getUnitIdOnTile(xPos, yPos);
+        Position source = new Position(xPos, yPos);
+        int unitId = board.getUnitIdOnTile(source);
         Unit selectedUnit = getUnitById(unitId);
         currentTurn.setSelectedUnit(selectedUnit);
-        currentTurn.setxPos(xPos);
-        currentTurn.setyPos(yPos);
+        currentTurn.setSource(source);
     }
 
-    public void processMove() {
-
+    public void processMove(int xPos, int yPos) {
+        Position destination = new Position(xPos, yPos);
+        if (!validateMove(destination)) {
+            return;
+        }
+        moveUnit(destination);
+        nextTurn();
     }
 
-    public void moveUnit(int xPos, int yPos) {
+    public void moveUnit(Position destination) {
         Unit selectedUnit = currentTurn.getSelectedUnit();
-        // validate
-        board.setUnitIdOnTile(xPos, yPos, selectedUnit.getId());
-
+        board.setUnitIdOnTile(destination, selectedUnit.getId());
+        board.clearTile(currentTurn.getSource());
     }
 
-    public void validateMove(Position destination) {
+    public boolean validateMove(Position destination) {
         Unit selectedUnit = currentTurn.getSelectedUnit();
-        Position source = new Position(currentTurn.getxPos(), currentTurn.getyPos());
-        selectedUnit.canReach(source, destination);
+        Position distance = currentTurn.getSource().distanceTo(destination);
+        boolean canReach = selectedUnit.canReach(distance);
+        if (canReach) {
+            return true;
+        }
+        System.out.println("Invalid move!");
+        return false;
     }
 
     public void computeValidMoves() {
@@ -67,8 +74,12 @@ public class Game {
     }
 
     public Unit getUnitOnTile(int xPos, int yPos) {
-        int unitId = board.getUnitIdOnTile(xPos, yPos);
+        int unitId = board.getUnitIdOnTile(new Position(xPos, yPos));
         return getUnitById(unitId);
+    }
+
+    public boolean isUnitSelected() {
+        return this.currentTurn.isUnitSelected();
     }
 }
 

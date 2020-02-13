@@ -1,6 +1,7 @@
 package game;
 
 import common.Position;
+import common.PositionGenerator;
 import unit.Unit;
 import unit.UnitColor;
 import unit.UnitManager;
@@ -11,9 +12,11 @@ public class GameSetup {
 
     Map<Unit, Position> initialUnitPositions;
     UnitManager unitManager;
+    PositionGenerator generator;
 
     public GameSetup() {
         unitManager = new UnitManager();
+        generator = new PositionGenerator();
         initialUnitPositions = new TreeMap<>(new Comparator<Unit>() {
             @Override
             public int compare(Unit unit, Unit otherUnit) {
@@ -44,11 +47,6 @@ public class GameSetup {
         return false;
     }
 
-    private Position generateRandomPosition() {
-        Random rand = new Random();
-        return new Position(rand.nextInt(10), rand.nextInt(10));
-    }
-
     public List<Unit> getUnplacedUnits() {
         List<Unit> unplacedUnits = new ArrayList<>();
         for (Map.Entry<Unit, Position> unitPositionEntry : initialUnitPositions.entrySet()) {
@@ -64,7 +62,16 @@ public class GameSetup {
         if (!isValidStartingPosition(unit.getColor(), position)) {
             return;
         }
+        eraseUnitPosition(position);
         initialUnitPositions.replace(unit, position);
+    }
+
+    private void eraseUnitPosition(Position position) {
+        for (Map.Entry<Unit, Position> unitPositionEntry : initialUnitPositions.entrySet()) {
+            if (unitPositionEntry.getValue().equals(position)) {
+                initialUnitPositions.replace(unitPositionEntry.getKey(), null);
+            }
+        }
     }
 
     public boolean isSetupDone() {

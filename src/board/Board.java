@@ -1,6 +1,7 @@
 package board;
 
 import common.Position;
+import javafx.geometry.Pos;
 import unit.Unit;
 
 import java.util.ArrayList;
@@ -64,11 +65,15 @@ public class Board {
         return destinationPath;
     }
 
-    public int getUnitIdOnTile(int x, int y) {
-        return this.gameField[x][y].getUnitId();
+    public int getUnitIdOnTile(Position position) {
+        return this.gameField[position.getX()][position.getY()].getUnitId();
     }
 
-    public void setUnitIdOnTile(int x, int y, int id) {
-        this.gameField[x][y].setUnitId(id);
+    public void setUnitIdOnTile(Position position, int id) {
+        this.gameField[position.getX()][position.getY()].setUnitId(id);
+    }
+
+    public void clearTile(Position position) {
+        this.gameField[position.getX()][position.getY()].clearUnitId();
     }
 }
