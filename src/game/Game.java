@@ -15,6 +15,7 @@ public class Game {
     private ArrayList<Unit> units;
     private Board board;
     private Turn currentTurn;
+    private ArrayList<Turn> turnHistory;
 
     public Game(Map<Unit, Position> initalUnitPositions) {
         board = new Board();
@@ -22,7 +23,14 @@ public class Game {
         for (Map.Entry<Unit, Position> entry : initalUnitPositions.entrySet()) {
             board.setUnitIdOnTile(entry.getKey().getId(), entry.getValue().getX(), entry.getValue().getY());
         }
+        turnHistory = new ArrayList<>();
         currentTurn = new Turn(UnitColor.BLUE);
+    }
+
+    private void nextTurn() {
+        turnHistory.add(currentTurn);
+        UnitColor color = currentTurn.isType(UnitColor.BLUE) ? UnitColor.RED : UnitColor.BLUE;
+        currentTurn = new Turn(color);
     }
 
     public void selectUnit(int xPos, int yPos) {
@@ -31,6 +39,12 @@ public class Game {
         currentTurn.setSelectedUnit(selectedUnit);
         currentTurn.setxPos(xPos);
         currentTurn.setyPos(yPos);
+    }
+
+    public void processMove() {
+        validateMove();
+        moveUnit();
+        nextTurn();
     }
 
     public void moveUnit(int xPos, int yPos) {
@@ -46,16 +60,17 @@ public class Game {
         selectedUnit.canReach(source, destination);
     }
 
-    public void moveUnit(Unit selectedUnit, Position destination) {
-
-    }
-
     public void computeValidMoves() {
 
     }
 
     public Unit getUnitById(int unitId) {
         return units.stream().filter(unit -> unit.getId() == unitId).findFirst().orElse(null);
+    }
+
+    public Unit getUnitOnTile(int xPos, int yPos) {
+        int unitId = board.getUnitIdOnTile(xPos, yPos);
+        return getUnitById(unitId);
     }
 }
 

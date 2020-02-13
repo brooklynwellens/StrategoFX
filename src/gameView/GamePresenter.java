@@ -1,13 +1,11 @@
 package gameView;
 
-import common.Position;
 import game.Game;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class GamePresenter {
 
@@ -40,6 +38,8 @@ public class GamePresenter {
         for (Node rect : view.getBoard().getChildren()) {
             int x = GridPane.getColumnIndex(rect);
             int y = GridPane.getRowIndex(rect);
+            String unitRank = model.getUnitOnTile(x, y).getRank().name();
+            ((Button) rect).setText(unitRank);
         }
     }
 }

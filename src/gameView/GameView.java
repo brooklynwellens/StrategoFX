@@ -23,12 +23,8 @@ public class GameView extends BorderPane {
         board = new GridPane();
         for (int i = 0; i < 10; i++) {
             for (int j = 0; j < 10; j++) {
-                Rectangle rect = new Rectangle();
-                rect.setHeight(100);
-                rect.setWidth(100);
-                rect.setFill(Color.WHITE);
-                rect.setStroke(Color.BLACK);
-                board.add(rect,i,j);
+                Button btn = new Button();
+                board.add(btn,i,j);
             }
         }
     }

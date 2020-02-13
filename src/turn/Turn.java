@@ -26,6 +26,10 @@ public class Turn {
         return yPos;
     }
 
+    public boolean isType(UnitColor turnType) {
+        return this.turnType == turnType;
+    }
+
     public void setSelectedUnit(Unit selectedUnit) {
         if (selectedUnit.isColor(turnType)) {
             this.selectedUnit = selectedUnit;
