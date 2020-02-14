@@ -27,6 +27,7 @@ public class Main extends Application {
 
         Map<Unit, Position> initialUnitPositions = new HashMap<>();
         initialUnitPositions.put(new Unit(Rank.General, UnitColor.BLUE), new Position(9,9));
+        initialUnitPositions.put(new Unit(Rank.Marshal, UnitColor.BLUE), new Position(8,9));
         initialUnitPositions.put(new Unit(Rank.General, UnitColor.RED), new Position(0,0));
 
 

@@ -35,16 +35,18 @@ public class Board {
         return Arrays.stream(gameField).flatMap(Arrays::stream).filter(tile -> tile.getUnitId() == unitId).findFirst().orElse(null);
     }
 
-    public boolean tileIsOccupiedWithCoordinates(int x, int y) {
-        return this.gameField[x][y].isOccupied();
+    public boolean isRouteAvailable(Position start, Position destination) {
+        List<Position> route = getRouteTo(start, destination);
+        for (Position position : route) {
+            Tile tile = gameField[position.getX()][position.getY()];
+            if (!tile.isAccessible() || tile.isOccupied()) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    public boolean tileIsAccessible(Position tilePosition) {
-        return this.gameField[tilePosition.getX()][tilePosition.getY()].isAccessible();
-    }
-
-
-    public List<Position> getRouteTo(Position start, Position destination) {
+    private List<Position> getRouteTo(Position start, Position destination) {
 
         List<Position> destinationPath = new ArrayList<>();
 
@@ -75,5 +77,13 @@ public class Board {
 
     public void clearTile(Position position) {
         this.gameField[position.getX()][position.getY()].clearUnitId();
+    }
+
+    public boolean tileIsOccupied(Position position) {
+        return this.gameField[position.getX()][position.getY()].isOccupied();
+    }
+
+    public boolean tileIsAccessible(Position position) {
+        return this.gameField[position.getX()][position.getY()].isAccessible();
     }
 }

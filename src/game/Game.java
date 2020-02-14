@@ -44,6 +44,11 @@ public class Game {
         if (!validateMove(destination)) {
             return;
         }
+        /*int idOnDestination = board.getUnitIdOnTile(destination);
+        if (idOnDestination > 0) {
+            Unit enemyUnit = getUnitById(idOnDestination);
+            currentTurn.getSelectedUnit().battle(enemyUnit);
+        }*/
         moveUnit(destination);
         nextTurn();
     }
@@ -58,7 +63,14 @@ public class Game {
         Unit selectedUnit = currentTurn.getSelectedUnit();
         Position distance = currentTurn.getSource().distanceTo(destination);
         boolean canReach = selectedUnit.canReach(distance);
-        if (canReach) {
+        boolean routeIsAvailable = board.isRouteAvailable(currentTurn.getSource(), destination);
+        boolean friendlyUnitAtDestination = false;
+        boolean destinationIsAccessible = board.tileIsAccessible(destination);
+        int idOnDestination = board.getUnitIdOnTile(destination);
+        if (idOnDestination > 0 && getUnitById(idOnDestination).isColor(selectedUnit.getColor())) {
+            friendlyUnitAtDestination = true;
+        }
+        if (canReach && routeIsAvailable && !friendlyUnitAtDestination && destinationIsAccessible) {
             return true;
         }
         System.out.println("Invalid move!");
