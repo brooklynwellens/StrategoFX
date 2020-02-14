@@ -38,6 +38,7 @@ public class GamePresenter {
                         model.processMove(x, y);
                     }
                     updateView();
+
                 }
             });
         }

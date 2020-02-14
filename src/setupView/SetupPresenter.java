@@ -36,9 +36,7 @@ public class SetupPresenter {
                             int y = GridPane.getRowIndex(btn);
                             Unit unitToPlace = view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem();
                             model.setUnitPosition(unitToPlace, x, y);
-                            ((Button) btn).setText(view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem().getRank().name());
-                            btn.setDisable(true);
-                            btn.setOpacity(100);
+                            ((Button) btn).setText(model.getPlacedUnit().getRank().name());
                             updateView();
                             if (model.isSetupDone()) {
                                 //transition to Game phase

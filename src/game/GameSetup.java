@@ -13,6 +13,7 @@ public class GameSetup {
     Map<Unit, Position> initialUnitPositions;
     UnitManager unitManager;
     PositionGenerator generator;
+    Unit placedUnit;
 
     public GameSetup() {
         unitManager = new UnitManager();
@@ -26,14 +27,14 @@ public class GameSetup {
         setInitialUnitPositions();
     }
 
+    public Unit getPlacedUnit() {
+        return placedUnit;
+    }
+
     private void setInitialUnitPositions() {
         List<Unit> units = unitManager.getUnits();
         for (Unit unit : units) {
-            if (unit.isColor(UnitColor.RED)) {
-                initialUnitPositions.put(unit, null); // generate position
-            } else {
-                initialUnitPositions.put(unit, null);
-            }
+            initialUnitPositions.put(unit, null);
         }
     }
 
@@ -59,16 +60,16 @@ public class GameSetup {
 
     public void setUnitPosition(Unit unit, int x, int y) {
         Position position = new Position(x, y);
-        if (!isValidStartingPosition(unit.getColor(), position)) {
-            return;
+        if (isValidStartingPosition(unit.getColor(), position)) {
+            eraseUnitPosition(position);
+            initialUnitPositions.replace(unit, position);
+            placedUnit = unit;
         }
-        eraseUnitPosition(position);
-        initialUnitPositions.replace(unit, position);
     }
 
     private void eraseUnitPosition(Position position) {
         for (Map.Entry<Unit, Position> unitPositionEntry : initialUnitPositions.entrySet()) {
-            if (unitPositionEntry.getValue().equals(position)) {
+            if (unitPositionEntry.getValue() != null && unitPositionEntry.getValue().equals(position)) {
                 initialUnitPositions.replace(unitPositionEntry.getKey(), null);
             }
         }
