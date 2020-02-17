@@ -1,5 +1,6 @@
 package gameView;
 
+import common.Position;
 import game.Game;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -7,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import unit.Unit;
 import unit.UnitColor;
 
 public class GamePresenter {
@@ -32,10 +34,11 @@ public class GamePresenter {
                 public void handle(MouseEvent mouseEvent) {
                     int x = GridPane.getColumnIndex(btn);
                     int y = GridPane.getRowIndex(btn);
+                    Position position = new Position(x, y);
                     if (!model.isUnitSelected()) {
-                        model.selectUnit(x, y);
+                        model.selectUnit(position);
                     } else {
-                        model.processMove(x, y);
+                        model.processMove(position);
                     }
                     updateView();
 
@@ -49,9 +52,11 @@ public class GamePresenter {
             int x = GridPane.getColumnIndex(rect);
             int y = GridPane.getRowIndex(rect);
             String text = "";
-            if (model.getUnitOnTile(x, y) != null) {
-                text = model.getUnitOnTile(x, y).getRank().name();
-                if (model.getUnitOnTile(x, y).isColor(UnitColor.BLUE)) {
+            Position position = new Position(x, y);
+            Unit selectedUnit = model.getUnitOnTile(position);
+            if (selectedUnit != null) {
+                text = selectedUnit.getRank().name();
+                if (selectedUnit.isColor(UnitColor.BLUE)) {
                     ((Button) rect).setTextFill(Color.BLUE);
                 } else
                     ((Button) rect).setTextFill(Color.RED);

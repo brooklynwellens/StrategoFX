@@ -39,9 +39,6 @@ public class GameSetup {
     }
 
     private boolean isValidStartingPosition(UnitColor color, Position position) {
-        if (color == UnitColor.RED) {
-            return position.getX() < 10 && position.getX() >= 0 && position.getY() >= 0 && position.getY() < 4;
-        }
         if (color == UnitColor.BLUE) {
             return position.getX() < 10 && position.getX() >= 0 && position.getY() >= 6 && position.getY() < 10;
         }

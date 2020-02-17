@@ -8,7 +8,7 @@ public class Turn {
 
     Unit selectedUnit;
     UnitColor turnType;
-    Position source;
+    Position start;
     Position destination;
 
     public Turn(UnitColor turnType) {
@@ -20,12 +20,16 @@ public class Turn {
         return selectedUnit;
     }
 
+    public UnitColor getTurnType() {
+        return turnType;
+    }
+
     public boolean isType(UnitColor turnType) {
         return this.turnType == turnType;
     }
 
-    public Position getSource() {
-        return source;
+    public Position getStart() {
+        return start;
     }
 
     public Position getDestination() {
@@ -33,16 +37,21 @@ public class Turn {
     }
 
     public void setSelectedUnit(Unit selectedUnit) {
+        if (selectedUnit == null) {
+            System.out.println("No unit at this position");
+            return;
+        }
         if (selectedUnit.isColor(turnType)) {
             this.selectedUnit = selectedUnit;
             System.out.println("Selected: " + selectedUnit);
         } else {
+            this.selectedUnit = null;
             System.out.println("Not your unit!");
         }
     }
 
-    public void setSource(Position source) {
-        this.source = source;
+    public void setStart(Position start) {
+        this.start = start;
     }
 
     public void setDestination(Position destination) {

@@ -34,20 +34,8 @@ public class Unit {
         return this.color == color;
     }
 
-    public void battle(Unit enemyUnit) {
-        Rank enemyRank = enemyUnit.getRank();
-        if (rank.compare(enemyRank) == ComparisonResult.WIN) {
-            enemyUnit.die();
-            return;
-        }
-        if (rank.compare(enemyRank) == ComparisonResult.DRAW) {
-            enemyUnit.die();
-            die();
-            return;
-        }
-        if (rank.compare(enemyRank) == ComparisonResult.LOSS) {
-            die();
-        }
+    public boolean isAlive() {
+        return alive;
     }
 
     public void die() {
@@ -56,6 +44,10 @@ public class Unit {
 
     public boolean canReach(Position distance) {
         return (distance.getX() <= this.rank.getMovementspeed() && distance.getY() == 0) || (distance.getY() <= this.rank.getMovementspeed() && distance.getX() == 0);
+    }
+
+    public ComparisonResult getBattleResult(Unit enemyUnit) {
+        return this.rank.compare(enemyUnit.rank);
     }
 
     public String toString() {

@@ -23,16 +23,12 @@ public class Board {
         for (int y = 0; y < HEIGHT; y++) {
             for (int x = 0; x < WIDTH; x++) {
                 if ((y == 4 || y == 5) && (x == 2 || x == 3 || x == 6 || x == 7)) {
-                    gameField[x][y] = new Tile(x, y, Surface.WATER);
+                    gameField[x][y] = new Tile(Surface.WATER);
                     continue;
                 }
-                gameField[x][y] = new Tile(x, y, Surface.GRASS);
+                gameField[x][y] = new Tile(Surface.GRASS);
             }
         }
-    }
-
-    public Tile getTileByUnitId(int unitId) {
-        return Arrays.stream(gameField).flatMap(Arrays::stream).filter(tile -> tile.getUnitId() == unitId).findFirst().orElse(null);
     }
 
     public boolean isRouteAvailable(Position start, Position destination) {

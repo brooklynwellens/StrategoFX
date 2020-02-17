@@ -6,7 +6,9 @@ import common.Position;
 import turn.Turn;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Game {
 
@@ -25,73 +27,95 @@ public class Game {
         currentTurn = new Turn(UnitColor.BLUE);
     }
 
-    private void nextTurn() {
-        turnHistory.add(currentTurn);
-        UnitColor color = currentTurn.isType(UnitColor.BLUE) ? UnitColor.RED : UnitColor.BLUE;
-        currentTurn = new Turn(color);
-    }
-
-    public void selectUnit(int xPos, int yPos) {
-        Position source = new Position(xPos, yPos);
-        int unitId = board.getUnitIdOnTile(source);
-        Unit selectedUnit = getUnitById(unitId);
+    public void selectUnit(Position source) {
+        Unit selectedUnit = getUnitOnTile(source);
         currentTurn.setSelectedUnit(selectedUnit);
-        currentTurn.setSource(source);
+        currentTurn.setStart(source);
     }
 
-    public void processMove(int xPos, int yPos) {
-        Position destination = new Position(xPos, yPos);
+    public void processMove(Position destination) {
+        Unit selectedUnit = currentTurn.getSelectedUnit();
         if (!validateMove(destination)) {
             return;
         }
-        /*int idOnDestination = board.getUnitIdOnTile(destination);
-        if (idOnDestination > 0) {
-            Unit enemyUnit = getUnitById(idOnDestination);
-            currentTurn.getSelectedUnit().battle(enemyUnit);
-        }*/
-        moveUnit(destination);
+        currentTurn.setDestination(destination);
+        board.clearTile(currentTurn.getStart());
+        if (!board.tileIsOccupied(destination)) {
+            board.setUnitIdOnTile(destination, selectedUnit.getId());
+            nextTurn();
+            return;
+        }
+        Unit enemyUnit = getUnitOnTile(destination);
+        processBattle(selectedUnit, enemyUnit);
         nextTurn();
     }
 
-    public void moveUnit(Position destination) {
-        Unit selectedUnit = currentTurn.getSelectedUnit();
-        board.setUnitIdOnTile(destination, selectedUnit.getId());
-        board.clearTile(currentTurn.getSource());
-    }
-
-    public boolean validateMove(Position destination) {
-        Unit selectedUnit = currentTurn.getSelectedUnit();
-        Position distance = currentTurn.getSource().distanceTo(destination);
-        boolean canReach = selectedUnit.canReach(distance);
-        boolean routeIsAvailable = board.isRouteAvailable(currentTurn.getSource(), destination);
+    private boolean validateMove(Position destination) {
+        boolean canReach = selectedUnitCanReach(destination);
+        boolean isRouteAvailable = board.isRouteAvailable(currentTurn.getStart(), destination);
         boolean friendlyUnitAtDestination = false;
         boolean destinationIsAccessible = board.tileIsAccessible(destination);
-        int idOnDestination = board.getUnitIdOnTile(destination);
-        if (idOnDestination > 0 && getUnitById(idOnDestination).isColor(selectedUnit.getColor())) {
-            friendlyUnitAtDestination = true;
+        if (board.tileIsOccupied(destination)) {
+            friendlyUnitAtDestination = friendlyUnitAt(destination);
         }
-        if (canReach && routeIsAvailable && !friendlyUnitAtDestination && destinationIsAccessible) {
+        if (canReach && isRouteAvailable && !friendlyUnitAtDestination && destinationIsAccessible) {
             return true;
         }
         System.out.println("Invalid move!");
         return false;
     }
 
-    public void computeValidMoves() {
-
+    private boolean selectedUnitCanReach(Position destination) {
+        Unit selectedUnit = currentTurn.getSelectedUnit();
+        Position start = currentTurn.getStart();
+        Position distance = start.distanceTo(destination);
+        return selectedUnit.canReach(distance);
     }
 
-    public Unit getUnitById(int unitId) {
+    private boolean friendlyUnitAt(Position destination) {
+        int idOnDestination = board.getUnitIdOnTile(destination);
+        return getUnitById(idOnDestination).isColor(currentTurn.getTurnType());
+    }
+
+    private void nextTurn() {
+        turnHistory.add(currentTurn);
+        UnitColor color = currentTurn.isType(UnitColor.BLUE) ? UnitColor.RED : UnitColor.BLUE;
+        currentTurn = new Turn(color);
+    }
+
+    private void processBattle(Unit friendlyUnit, Unit enemyUnit) {
+        ComparisonResult battleResult = friendlyUnit.getBattleResult(enemyUnit);
+        Position destination = currentTurn.getDestination();
+        if (battleResult == ComparisonResult.DRAW) {
+            friendlyUnit.die();
+            enemyUnit.die();
+            board.clearTile(destination);
+            return;
+        }
+        if (battleResult == ComparisonResult.WIN) {
+            enemyUnit.die();
+            board.setUnitIdOnTile(destination, friendlyUnit.getId());
+        }
+        if (battleResult == ComparisonResult.LOSS) {
+            friendlyUnit.die();
+        }
+    }
+
+    private Unit getUnitById(int unitId) {
         return units.stream().filter(unit -> unit.getId() == unitId).findFirst().orElse(null);
     }
 
-    public Unit getUnitOnTile(int xPos, int yPos) {
-        int unitId = board.getUnitIdOnTile(new Position(xPos, yPos));
+    public Unit getUnitOnTile(Position position) {
+        int unitId = board.getUnitIdOnTile(position);
         return getUnitById(unitId);
     }
 
     public boolean isUnitSelected() {
         return this.currentTurn.isUnitSelected();
+    }
+
+    public List<Unit> getCapturedUnits(UnitColor color) {
+        return units.stream().filter(unit -> unit.isColor(color) && !unit.isAlive()).collect(Collectors.toList());
     }
 }
 
