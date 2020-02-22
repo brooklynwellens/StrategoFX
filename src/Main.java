@@ -31,14 +31,14 @@ public class Main extends Application {
         initialUnitPositions.put(new Unit(Rank.General, UnitColor.RED), new Position(7,9));
 
 
-        SetupView view2 = new SetupView();
+        SetupView setupView = new SetupView();
         GameSetup setup = new GameSetup();
-        SetupPresenter presenter2 = new SetupPresenter(view2, setup);
+        SetupPresenter presenter2 = new SetupPresenter(setupView, setup);
         GameView view = new GameView();
         Game model = new Game(initialUnitPositions);
         GamePresenter presenter = new GamePresenter(view, model);
 
-        Scene scene = new Scene(presenter.getView());
+        Scene scene = new Scene(presenter2.getView());
         stage.setTitle("Stratego");
         stage.setScene(scene);
         stage.show();

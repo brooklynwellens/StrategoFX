@@ -82,4 +82,15 @@ public class Board {
     public boolean tileIsAccessible(Position position) {
         return this.gameField[position.getX()][position.getY()].isAccessible();
     }
+
+    public Position getPositionById(int unitId) {
+        for (int y = 0; y < HEIGHT; y++) {
+            for (int x = 0; x < WIDTH; x++) {
+                if (gameField[x][y].getUnitId() == unitId) {
+                    return new Position(x, y);
+                }
+            }
+        }
+        return new Position(-1, -1);
+    }
 }

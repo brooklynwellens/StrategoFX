@@ -1,5 +1,6 @@
 package game;
 
+import ai.Ai;
 import unit.*;
 import board.Board;
 import common.Position;
@@ -16,6 +17,7 @@ public class Game {
     private Board board;
     private Turn currentTurn;
     private ArrayList<Turn> turnHistory;
+    private Ai ai;
 
     public Game(Map<Unit, Position> initialUnitPositions) {
         board = new Board();
@@ -23,6 +25,8 @@ public class Game {
         for (Map.Entry<Unit, Position> entry : initialUnitPositions.entrySet()) {
             board.setUnitIdOnTile(entry.getValue(), entry.getKey().getId());
         }
+        List<Unit> aiUnits = units.stream().filter(unit -> unit.isColor(UnitColor.RED)).collect(Collectors.toList());
+        ai = new Ai(aiUnits);
         turnHistory = new ArrayList<>();
         currentTurn = new Turn(UnitColor.BLUE);
     }
@@ -98,6 +102,20 @@ public class Game {
         }
         if (battleResult == ComparisonResult.LOSS) {
             friendlyUnit.die();
+        }
+    }
+
+    public void computerMove() {
+        boolean isMoveValid = false;
+        while (!isMoveValid) {
+            Unit selectedUnit = ai.chooseUnit();
+            Position source = board.getPositionById(selectedUnit.getId());
+            selectUnit(source);
+            Position destination = ai.choosePosition();
+            processMove(destination);
+            if (validateMove(destination)) {
+                isMoveValid = true;
+            }
         }
     }
 

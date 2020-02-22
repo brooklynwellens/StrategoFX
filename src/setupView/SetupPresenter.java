@@ -35,7 +35,7 @@ public class SetupPresenter {
                             int x = GridPane.getColumnIndex(btn);
                             int y = GridPane.getRowIndex(btn);
                             Unit unitToPlace = view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem();
-                            model.setUnitPosition(unitToPlace, x, y);
+                            model.setUnitPosition(unitToPlace, new Position(x,y));
                             ((Button) btn).setText(model.getPlacedUnit().getRank().name());
                             updateView();
                             if (model.isSetupDone()) {

@@ -2,6 +2,7 @@ package unit;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UnitManager {
 
@@ -37,7 +38,7 @@ public class UnitManager {
         }
     }
 
-    private List<Unit> createUnits(Rank rank,UnitColor color, int amount) {
+    private List<Unit> createUnits(Rank rank, UnitColor color, int amount) {
         List<Unit> createdUnits = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             createdUnits.add(new Unit(rank, color));
@@ -47,5 +48,9 @@ public class UnitManager {
 
     public List<Unit> getUnits() {
         return units;
+    }
+
+    public List<Unit> getUnitsOfColor(UnitColor color) {
+        return units.stream().filter(unit -> unit.isColor(color)).collect(Collectors.toList());
     }
 }
