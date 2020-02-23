@@ -11,19 +11,19 @@ import java.util.*;
 public class GameSetup {
 
     private Map<Position, Unit> unitStartingPositions;
-    private UnitManager unitManager;
     private List<Unit> unplacedUnits;
     private Unit placedUnit;
-    private AiUnitSetup aiUnitSetup;
 
     public GameSetup() {
-        unitManager = new UnitManager();
+        UnitManager unitManager = new UnitManager();
         this.unplacedUnits = unitManager.getUnitsOfColor(UnitColor.BLUE);
-        unitStartingPositions = new HashMap<>();
-        setInitialValidPositions();
+        this.unitStartingPositions = new HashMap<>();
+        AiUnitSetup aiUnitSetup = new AiUnitSetup(unitManager.getUnitsOfColor(UnitColor.RED));
+        this.unitStartingPositions.putAll(aiUnitSetup.getUnitStartingPositions());
+        initializeValidPlayerPositions();
     }
 
-    private void setInitialValidPositions() {
+    private void initializeValidPlayerPositions() {
         for (int y = 6; y < 10; y++) {
             for (int x = 0; x < 10; x++) {
                 unitStartingPositions.put(new Position(x, y), null);
@@ -32,26 +32,27 @@ public class GameSetup {
     }
 
     public void setUnitPosition(Unit unit, Position position) {
-        if (isValidStartingPosition(position)) {
-            if (unitAtPosition(position)) {
+        if (isValidPlayerStartingPosition(position)) {
+            if (isUnitAt(position)) {
                 unplacedUnits.add(unitStartingPositions.get(position));
             }
             unitStartingPositions.replace(position, unit);
+            unplacedUnits.remove(unit);
             placedUnit = unit;
         }
     }
 
     // rework naar stream
-    private boolean isValidStartingPosition(Position position) {
+    private boolean isValidPlayerStartingPosition(Position position) {
         for (Position positionKey : unitStartingPositions.keySet()) {
-            if (positionKey.equals(position)) {
+            if (positionKey.equals(position) && positionKey.getY() > 5 && positionKey.getY() < 10) {
                 return true;
             }
         }
         return false;
     }
 
-    private boolean unitAtPosition(Position position) {
+    private boolean isUnitAt(Position position) {
         return unitStartingPositions.get(position) != null;
     }
 
@@ -64,6 +65,6 @@ public class GameSetup {
     }
 
     public boolean isSetupDone() {
-        return unplacedUnits.size() == 0;
+        return unplacedUnits.isEmpty();
     }
 }

@@ -24,7 +24,7 @@ public class Position {
         return y;
     }
 
-    public Position distanceTo(Position destination) {
+    public Position getDistanceTo(Position destination) {
         int deltaX = Math.abs(this.getX() - destination.getX());
         int deltaY = Math.abs(this.getY() - destination.getY());
         return new Position(deltaX, deltaY);

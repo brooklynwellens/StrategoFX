@@ -1,14 +1,14 @@
 package game;
 
+import Battle.Battle;
+import Battle.BattleResult;
 import ai.Ai;
 import unit.*;
 import board.Board;
 import common.Position;
 import turn.Turn;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Game {
@@ -18,17 +18,19 @@ public class Game {
     private Turn currentTurn;
     private ArrayList<Turn> turnHistory;
     private Ai ai;
+    private Map<Unit, Integer> visibleUnitsWithCounter;
 
-    public Game(Map<Unit, Position> initialUnitPositions) {
+    public Game(Map<Position, Unit> initialUnitPositions) {
         board = new Board();
-        units = new ArrayList<>(initialUnitPositions.keySet());
-        for (Map.Entry<Unit, Position> entry : initialUnitPositions.entrySet()) {
-            board.setUnitIdOnTile(entry.getValue(), entry.getKey().getId());
+        units = new ArrayList<>(initialUnitPositions.values());
+        for (Map.Entry<Position, Unit> entry : initialUnitPositions.entrySet()) {
+            board.setUnitIdOnTile(entry.getKey(), entry.getValue().getId());
         }
         List<Unit> aiUnits = units.stream().filter(unit -> unit.isColor(UnitColor.RED)).collect(Collectors.toList());
         ai = new Ai(aiUnits);
         turnHistory = new ArrayList<>();
         currentTurn = new Turn(UnitColor.BLUE);
+        visibleUnitsWithCounter = new HashMap<>();
     }
 
     public void selectUnit(Position source) {
@@ -39,28 +41,29 @@ public class Game {
 
     public void processMove(Position destination) {
         Unit selectedUnit = currentTurn.getSelectedUnit();
-        if (!validateMove(destination)) {
+        if (!isMoveValid(destination)) {
             return;
         }
         currentTurn.setDestination(destination);
         board.clearTile(currentTurn.getStart());
-        if (!board.tileIsOccupied(destination)) {
+        if (!board.isTileOccupied(destination)) {
             board.setUnitIdOnTile(destination, selectedUnit.getId());
             nextTurn();
             return;
         }
         Unit enemyUnit = getUnitOnTile(destination);
-        processBattle(selectedUnit, enemyUnit);
+        processBattleResult(selectedUnit, enemyUnit);
+        updateUnitVisibility();
         nextTurn();
     }
 
-    private boolean validateMove(Position destination) {
-        boolean canReach = selectedUnitCanReach(destination);
+    private boolean isMoveValid(Position destination) {
+        boolean canReach = canSelectedUnitReach(destination);
         boolean isRouteAvailable = board.isRouteAvailable(currentTurn.getStart(), destination);
         boolean friendlyUnitAtDestination = false;
-        boolean destinationIsAccessible = board.tileIsAccessible(destination);
-        if (board.tileIsOccupied(destination)) {
-            friendlyUnitAtDestination = friendlyUnitAt(destination);
+        boolean destinationIsAccessible = board.isTileAccessible(destination);
+        if (board.isTileOccupied(destination)) {
+            friendlyUnitAtDestination = isFriendlyUnitAt(destination);
         }
         if (canReach && isRouteAvailable && !friendlyUnitAtDestination && destinationIsAccessible) {
             return true;
@@ -69,14 +72,14 @@ public class Game {
         return false;
     }
 
-    private boolean selectedUnitCanReach(Position destination) {
+    private boolean canSelectedUnitReach(Position destination) {
         Unit selectedUnit = currentTurn.getSelectedUnit();
         Position start = currentTurn.getStart();
-        Position distance = start.distanceTo(destination);
+        Position distance = start.getDistanceTo(destination);
         return selectedUnit.canReach(distance);
     }
 
-    private boolean friendlyUnitAt(Position destination) {
+    private boolean isFriendlyUnitAt(Position destination) {
         int idOnDestination = board.getUnitIdOnTile(destination);
         return getUnitById(idOnDestination).isColor(currentTurn.getTurnType());
     }
@@ -87,35 +90,44 @@ public class Game {
         currentTurn = new Turn(color);
     }
 
-    private void processBattle(Unit friendlyUnit, Unit enemyUnit) {
-        ComparisonResult battleResult = friendlyUnit.getBattleResult(enemyUnit);
+    private void processBattleResult(Unit attackingUnit, Unit defendingUnit) {
+        Battle battle = new Battle(attackingUnit, defendingUnit);
+        BattleResult battleResult = battle.getResult();
         Position destination = currentTurn.getDestination();
-        if (battleResult == ComparisonResult.DRAW) {
-            friendlyUnit.die();
-            enemyUnit.die();
+        if (battleResult == BattleResult.DRAW) {
             board.clearTile(destination);
             return;
         }
-        if (battleResult == ComparisonResult.WIN) {
-            enemyUnit.die();
-            board.setUnitIdOnTile(destination, friendlyUnit.getId());
+        if (battleResult == BattleResult.WIN) {
+            board.setUnitIdOnTile(destination, attackingUnit.getId());
         }
-        if (battleResult == ComparisonResult.LOSS) {
-            friendlyUnit.die();
+        if (battleResult == BattleResult.LOSS) {
+            visibleUnitsWithCounter.put(defendingUnit, 3);
+        }
+    }
+
+    private void updateUnitVisibility() {
+        for (Iterator<Map.Entry<Unit, Integer>> it = visibleUnitsWithCounter.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<Unit, Integer> entry = it.next();
+            if (entry.getValue() == 0) {
+                it.remove();
+            } else {
+                visibleUnitsWithCounter.replace(entry.getKey(), entry.getValue()-1);
+            }
         }
     }
 
     public void computerMove() {
-        boolean isMoveValid = false;
-        while (!isMoveValid) {
+        boolean isMoveCompleted = false;
+        while (!isMoveCompleted) {
             Unit selectedUnit = ai.chooseUnit();
             Position source = board.getPositionById(selectedUnit.getId());
             selectUnit(source);
             Position destination = ai.choosePosition();
-            processMove(destination);
-            if (validateMove(destination)) {
-                isMoveValid = true;
+            if (isMoveValid(destination)) {
+                isMoveCompleted = true;
             }
+            processMove(destination);
         }
     }
 
@@ -133,7 +145,7 @@ public class Game {
     }
 
     public List<Unit> getCapturedUnits(UnitColor color) {
-        return units.stream().filter(unit -> unit.isColor(color) && !unit.isAlive()).collect(Collectors.toList());
+        return units.stream().filter(unit -> unit.isColor(color) && !unit.isCaptured()).collect(Collectors.toList());
     }
 }
 

@@ -16,6 +16,7 @@ public class AiUnitSetup {
         this.unplacedUnits = unplacedUnits;
         unitStartingPositions = new HashMap<>();
         initializeAiStartingPositions();
+        placeUnits();
     }
 
     private void initializeAiStartingPositions() {
@@ -26,7 +27,7 @@ public class AiUnitSetup {
         }
     }
 
-    public void placeUnits() {
+    private void placeUnits() {
         for (Position position : unitStartingPositions.keySet()) {
             Unit unitToPlace = unplacedUnits.get(rand.nextInt(unplacedUnits.size()));
             unitStartingPositions.replace(position, unitToPlace);

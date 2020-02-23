@@ -25,10 +25,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        Map<Unit, Position> initialUnitPositions = new HashMap<>();
-        initialUnitPositions.put(new Unit(Rank.General, UnitColor.BLUE), new Position(9,9));
-        initialUnitPositions.put(new Unit(Rank.Marshal, UnitColor.BLUE), new Position(8,9));
-        initialUnitPositions.put(new Unit(Rank.General, UnitColor.RED), new Position(7,9));
+        Map<Position, Unit> initialUnitPositions = new HashMap<>();
+        initialUnitPositions.put(new Position(9,9), new Unit(Rank.General, UnitColor.BLUE));
+        initialUnitPositions.put(new Position(0,0), new Unit(Rank.General, UnitColor.RED));
 
 
         SetupView setupView = new SetupView();

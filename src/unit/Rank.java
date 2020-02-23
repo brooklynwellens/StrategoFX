@@ -21,21 +21,4 @@ public enum Rank {
         public int getStrength() {
                 return strength;
         }
-
-        public ComparisonResult compare(Rank enemyRank) {
-                if (this == Rank.Spy && enemyRank == Rank.Marshal) {
-                        return ComparisonResult.WIN;
-                }
-                if (this == Rank.Miner && enemyRank == Rank.Bomb) {
-                        return ComparisonResult.WIN;
-                }
-                if (this.strength > enemyRank.strength) {
-                        return ComparisonResult.WIN;
-                }
-
-                if (this.strength == enemyRank.strength) {
-                        return ComparisonResult.DRAW;
-                }
-                return ComparisonResult.LOSS;
-        }
 }

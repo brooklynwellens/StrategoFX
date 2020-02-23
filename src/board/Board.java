@@ -1,6 +1,7 @@
 package board;
 
 import common.Position;
+import common.Route;
 import javafx.geometry.Pos;
 import unit.Unit;
 
@@ -32,35 +33,15 @@ public class Board {
     }
 
     public boolean isRouteAvailable(Position start, Position destination) {
-        List<Position> route = getRouteTo(start, destination);
-        for (Position position : route) {
+        Route route = new Route(start, destination);
+        List<Position> path = route.getPath();
+        for (Position position : path) {
             Tile tile = gameField[position.getX()][position.getY()];
             if (!tile.isAccessible() || tile.isOccupied()) {
                 return false;
             }
         }
         return true;
-    }
-
-    private List<Position> getRouteTo(Position start, Position destination) {
-
-        List<Position> destinationPath = new ArrayList<>();
-
-        int xMin = Math.min(start.getX(), destination.getX());
-        int xMax = Math.max(start.getX(), destination.getX());
-        int yMin = Math.min(start.getY(), destination.getY());
-        int yMax = Math.max(start.getY(), destination.getY());
-
-        for (int x = xMin; x < xMax + 1; x++) {
-            for (int y = yMin; y < yMax + 1; y++) {
-                destinationPath.add(new Position(x, y));
-            }
-        }
-        if (destinationPath.size() >= 2) {
-            destinationPath.remove(destinationPath.size() - 1);
-        }
-        destinationPath.remove(0);
-        return destinationPath;
     }
 
     public int getUnitIdOnTile(Position position) {
@@ -75,11 +56,11 @@ public class Board {
         this.gameField[position.getX()][position.getY()].clearUnitId();
     }
 
-    public boolean tileIsOccupied(Position position) {
+    public boolean isTileOccupied(Position position) {
         return this.gameField[position.getX()][position.getY()].isOccupied();
     }
 
-    public boolean tileIsAccessible(Position position) {
+    public boolean isTileAccessible(Position position) {
         return this.gameField[position.getX()][position.getY()].isAccessible();
     }
 

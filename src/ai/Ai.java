@@ -20,12 +20,12 @@ public class Ai {
     }
 
     public Unit chooseUnit() {
-        boolean unitChosen = false;
+        boolean isValidUnitChosen = false;
         Unit chosenUnit = null;
-        while (!unitChosen) {
+        while (!isValidUnitChosen) {
             chosenUnit = units.get(rand.nextInt(units.size()));
-            if (chosenUnit.isAlive()) {
-                unitChosen = true;
+            if (chosenUnit.isCaptured()) {
+                isValidUnitChosen = true;
             }
         }
         return chosenUnit;

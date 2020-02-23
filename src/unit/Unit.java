@@ -9,7 +9,7 @@ public class Unit {
 
     private final Rank rank;
     private final UnitColor color;
-    private boolean alive = true;
+    private boolean captured = false;
     private int id;
 
     public Unit(Rank rank, UnitColor color) {
@@ -26,28 +26,20 @@ public class Unit {
         return id;
     }
 
-    public UnitColor getColor() {
-        return color;
-    }
-
     public boolean isColor(UnitColor color) {
         return this.color == color;
     }
 
-    public boolean isAlive() {
-        return alive;
+    public boolean isCaptured() {
+        return captured;
     }
 
-    public void die() {
-        alive = false;
+    public void captured() {
+        captured = true;
     }
 
     public boolean canReach(Position distance) {
         return (distance.getX() <= this.rank.getMovementspeed() && distance.getY() == 0) || (distance.getY() <= this.rank.getMovementspeed() && distance.getX() == 0);
-    }
-
-    public ComparisonResult getBattleResult(Unit enemyUnit) {
-        return this.rank.compare(enemyUnit.rank);
     }
 
     public String toString() {
