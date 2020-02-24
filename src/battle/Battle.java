@@ -1,4 +1,4 @@
-package Battle;
+package battle;
 
 import unit.Rank;
 import unit.Unit;

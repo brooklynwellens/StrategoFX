@@ -1,7 +1,7 @@
 package game;
 
-import Battle.Battle;
-import Battle.BattleResult;
+import battle.Battle;
+import battle.BattleResult;
 import ai.Ai;
 import unit.*;
 import board.Board;
@@ -40,36 +40,36 @@ public class Game {
     }
 
     public void processMove(Position destination) {
-        Unit selectedUnit = currentTurn.getSelectedUnit();
         if (!isMoveValid(destination)) {
             return;
         }
         currentTurn.setDestination(destination);
         board.clearTile(currentTurn.getStart());
+        Unit selectedUnit = currentTurn.getSelectedUnit();
         if (!board.isTileOccupied(destination)) {
             board.setUnitIdOnTile(destination, selectedUnit.getId());
-            nextTurn();
-            return;
+        } else {
+            Unit enemyUnit = getUnitOnTile(destination);
+            processBattleResult(selectedUnit, enemyUnit);
         }
-        Unit enemyUnit = getUnitOnTile(destination);
-        processBattleResult(selectedUnit, enemyUnit);
         updateUnitVisibility();
         nextTurn();
     }
 
     private boolean isMoveValid(Position destination) {
-        boolean canReach = canSelectedUnitReach(destination);
-        boolean isRouteAvailable = board.isRouteAvailable(currentTurn.getStart(), destination);
-        boolean friendlyUnitAtDestination = false;
-        boolean destinationIsAccessible = board.isTileAccessible(destination);
-        if (board.isTileOccupied(destination)) {
-            friendlyUnitAtDestination = isFriendlyUnitAt(destination);
+        if (!canSelectedUnitReach(destination)) {
+            return false;
         }
-        if (canReach && isRouteAvailable && !friendlyUnitAtDestination && destinationIsAccessible) {
-            return true;
+        if (!board.isRouteAvailable(currentTurn.getStart(), destination)) {
+            return false;
         }
-        System.out.println("Invalid move!");
-        return false;
+        if (board.isTileOccupied(destination) && isFriendlyUnitAt(destination)) {
+            return false;
+        }
+        if (!board.isTileAccessible(destination)) {
+            return false;
+        }
+        return true;
     }
 
     private boolean canSelectedUnitReach(Position destination) {
@@ -96,7 +96,6 @@ public class Game {
         Position destination = currentTurn.getDestination();
         if (battleResult == BattleResult.DRAW) {
             board.clearTile(destination);
-            return;
         }
         if (battleResult == BattleResult.WIN) {
             board.setUnitIdOnTile(destination, attackingUnit.getId());
