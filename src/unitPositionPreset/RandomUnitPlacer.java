@@ -1,6 +1,8 @@
 package unitPositionPreset;
 
 import common.Position;
+import positionInitializer.PositionInitializer;
+import positionInitializer.PositionInitializerFactory;
 import unit.Unit;
 import unit.UnitColor;
 import unit.UnitManager;
@@ -10,29 +12,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-public class RandomUnitPlacer implements UnitPlacer, PositionInitializer {
+public class RandomUnitPlacer implements UnitPlacer {
 
     private Map<Position, Unit> unitPositions;
-    private UnitColor unitColor;
     private List<Unit> unplacedUnits;
 
     public RandomUnitPlacer(UnitColor unitColor) {
-        this.unitColor = unitColor;
-        unitPositions = new HashMap<>();
+        PositionInitializerFactory factory = new PositionInitializerFactory();
+        PositionInitializer positionInitializer = factory.create(unitColor);
+        List<Position> positions = positionInitializer.getPositions();
+        this.unitPositions = new HashMap<>();
+        for (Position position : positions) {
+            unitPositions.put(position, null);
+        }
         UnitManager unitManager = new UnitManager();
         unplacedUnits = unitManager.getUnitsOfColor(unitColor);
-        initializeStartingPositions();
-    }
-
-    @Override
-    public void initializeStartingPositions() {
-        int yStart = unitColor == UnitColor.RED ? 0 : 6;
-        int yEnd = unitColor == UnitColor.RED ? 4 : 10;
-        for (int y = yStart; y < yEnd; y++) {
-            for (int x = 0; x < 10; x++) {
-                unitPositions.put(new Position(x, y), null);
-            }
-        }
     }
 
     @Override
@@ -45,6 +39,7 @@ public class RandomUnitPlacer implements UnitPlacer, PositionInitializer {
         }
     }
 
+    @Override
     public Map<Position, Unit> getUnitPositions() {
         return unitPositions;
     }
