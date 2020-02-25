@@ -2,9 +2,12 @@ package game;
 
 import ai.AiUnitSetup;
 import common.Position;
+import javafx.geometry.Pos;
 import unit.Unit;
 import unit.UnitColor;
 import unit.UnitManager;
+import unitPositionPreset.UnitPlacer;
+import unitPositionPreset.UnitPlacerFactory;
 
 import java.util.*;
 
@@ -54,6 +57,18 @@ public class GameSetup {
 
     private boolean isUnitAt(Position position) {
         return unitStartingPositions.get(position) != null;
+    }
+
+    public void useUnitPreset(UnitColor unitColor, String type) {
+        UnitPlacerFactory factory = new UnitPlacerFactory();
+        UnitPlacer unitPlacer = factory.create(type, unitColor);
+        unitPlacer.placeUnits();
+        Map<Position, Unit> unitPositions = unitPlacer.getUnitPositions();
+        replaceUnitPositions(unitPositions);
+    }
+
+    private void replaceUnitPositions(Map<Position, Unit> unitPositions) {
+
     }
 
     public Unit getPlacedUnit() {
