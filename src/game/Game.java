@@ -19,6 +19,7 @@ public class Game {
     private ArrayList<Turn> turnHistory;
     private Ai ai;
     private Map<Unit, Integer> visibleUnitsWithCounter;
+    private GameStatus status;
 
     public Game(Map<Position, Unit> initialUnitPositions) {
         board = new Board();
@@ -31,6 +32,7 @@ public class Game {
         turnHistory = new ArrayList<>();
         currentTurn = new Turn(UnitColor.BLUE);
         visibleUnitsWithCounter = new HashMap<>();
+        status = GameStatus.RUNNING;
     }
 
     public void selectUnit(Position source) {
@@ -52,6 +54,7 @@ public class Game {
             Unit enemyUnit = getUnitOnTile(destination);
             processBattleResult(selectedUnit, enemyUnit);
         }
+        updateStatus();
         updateUnitVisibility();
         nextTurn();
     }
@@ -116,6 +119,29 @@ public class Game {
         }
     }
 
+    private void updateStatus() {
+        if (isFlagCaptured(UnitColor.RED)) {
+            status = GameStatus.RED_CAPTURED;
+        }
+        if (isFlagCaptured(UnitColor.BLUE)) {
+            status = GameStatus.BLUE_CAPTURED;
+        }
+        if (!areMovesAvailable(UnitColor.RED)) {
+            status = GameStatus.RED_NO_MOVES;
+        }
+        if (!areMovesAvailable(UnitColor.BLUE)) {
+            status = GameStatus.BLUE_NO_MOVES;
+        }
+    }
+
+    private boolean isFlagCaptured(UnitColor color) {
+        return units.stream().anyMatch(unit -> unit.isColor(color) && unit.isCaptured() && unit.getRank() == Rank.Flag);
+    }
+
+    private boolean areMovesAvailable(UnitColor color) {
+        return units.stream().anyMatch(unit -> unit.isColor(color) && !unit.isCaptured() && unit.getRank().getMovementspeed() >= 1);
+    }
+
     public void computerMove() {
         boolean isMoveCompleted = false;
         while (!isMoveCompleted) {
@@ -145,6 +171,14 @@ public class Game {
 
     public List<Unit> getCapturedUnits(UnitColor color) {
         return units.stream().filter(unit -> unit.isColor(color) && !unit.isCaptured()).collect(Collectors.toList());
+    }
+
+    public List<Unit> getVisibleUnits() {
+        return new ArrayList<>(visibleUnitsWithCounter.keySet());
+    }
+
+    public boolean isGameOver() {
+        return status != GameStatus.RUNNING;
     }
 }
 

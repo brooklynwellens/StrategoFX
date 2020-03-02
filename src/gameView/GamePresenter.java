@@ -5,11 +5,15 @@ import game.Game;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import unit.Unit;
 import unit.UnitColor;
+
+import java.util.List;
 
 public class GamePresenter {
 
@@ -50,20 +54,22 @@ public class GamePresenter {
     }
 
     private void updateView() {
-        for (Node rect : view.getBoard().getChildren()) {
-            int x = GridPane.getColumnIndex(rect);
-            int y = GridPane.getRowIndex(rect);
-            String text = "";
+        List<Unit> visibleUnits = model.getVisibleUnits();
+        for (Node btn : view.getBoard().getChildren()) {
+            int x = GridPane.getColumnIndex(btn);
+            int y = GridPane.getRowIndex(btn);
             Position position = new Position(x, y);
             Unit selectedUnit = model.getUnitOnTile(position);
-            if (selectedUnit != null) {
-                text = selectedUnit.getRank().name();
-                if (selectedUnit.isColor(UnitColor.BLUE)) {
-                    ((Button) rect).setTextFill(Color.BLUE);
-                } else
-                    ((Button) rect).setTextFill(Color.RED);
+            if (selectedUnit == null) {
+                ((Button) btn).setGraphic(null);
+            } else {
+                if (selectedUnit.isColor(UnitColor.RED) && !visibleUnits.contains(selectedUnit)) {
+                    ((Button) btn).setGraphic(new ImageView(new Image("red_back.png", 50, 50, false, false)));
+                } else {
+                    String imagePath = (selectedUnit.getColor() + "_" + selectedUnit.getRank()).toLowerCase() + ".png";
+                    ((Button) btn).setGraphic(new ImageView(new Image(imagePath, 50, 50, false, false)));
+                }
             }
-            ((Button) rect).setText(text);
         }
     }
 }

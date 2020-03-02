@@ -30,6 +30,10 @@ public class Unit {
         return this.color == color;
     }
 
+    public UnitColor getColor() {
+        return color;
+    }
+
     public boolean isCaptured() {
         return captured;
     }

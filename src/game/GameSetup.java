@@ -64,11 +64,7 @@ public class GameSetup {
         UnitPlacer unitPlacer = factory.create(type, unitColor);
         unitPlacer.placeUnits();
         Map<Position, Unit> unitPositions = unitPlacer.getUnitPositions();
-        replaceUnitPositions(unitPositions);
-    }
-
-    private void replaceUnitPositions(Map<Position, Unit> unitPositions) {
-
+        unitStartingPositions.putAll(unitPositions);
     }
 
     public Unit getPlacedUnit() {

@@ -1,9 +1,10 @@
 package setupView;
 
 import game.GameSetup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import unit.Unit;
 import common.Position;
-import game.Game;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -36,11 +37,9 @@ public class SetupPresenter {
                             int y = GridPane.getRowIndex(btn);
                             Unit unitToPlace = view.getListOfUnplacedUnits().getSelectionModel().getSelectedItem();
                             model.setUnitPosition(unitToPlace, new Position(x,y));
-                            ((Button) btn).setText(model.getPlacedUnit().getRank().name());
+                            String imagePath = (model.getPlacedUnit().getColor() + "_" + model.getPlacedUnit().getRank()).toLowerCase() + ".png";
+                            ((Button) btn).setGraphic(new ImageView(new Image(imagePath, 60, 60, false, false)));
                             updateView();
-                            if (model.isSetupDone()) {
-                                //transition to Game phase
-                            }
                         }
                     });
             }
