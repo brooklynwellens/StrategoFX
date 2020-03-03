@@ -24,7 +24,7 @@ public class Ai {
         Unit chosenUnit = null;
         while (!isValidUnitChosen) {
             chosenUnit = units.get(rand.nextInt(units.size()));
-            if (chosenUnit.isCaptured()) {
+            if (!chosenUnit.isCaptured()) {
                 isValidUnitChosen = true;
             }
         }

@@ -3,6 +3,7 @@ package setupView;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
@@ -21,18 +22,20 @@ public class SetupView extends HBox {
     private Button continueBtn;
     private Button standardConfigBtn;
     private Button exitBtn;
+    private VBox rightVBox;
+    private Label unplacedUnitsLabel;
 
     public SetupView() {
-        intialiseNodes();
+        initialiseNodes();
         layoutNodes();
     }
 
-    private void intialiseNodes() {
+    private void initialiseNodes() {
         board = new GridPane();
-        int paneColums = 10;
+        int paneColumns = 10;
         int paneRows = 10;
         for (int i = 0; i < paneRows; i++) {
-            for (int j = 0; j < paneColums; j++) {
+            for (int j = 0; j < paneColumns; j++) {
                 Button btn = new Button();
                 board.add(btn,i,j);
             }
@@ -43,13 +46,15 @@ public class SetupView extends HBox {
         continueBtn = new Button("Continue");
         standardConfigBtn = new Button("Use unit preset");
         exitBtn = new Button("Exit");
+        rightVBox = new VBox();
+        unplacedUnitsLabel = new Label("Unplaced Units");
     }
 
     private void layoutNodes() {
         board.getStylesheets().add("test.css");
         infoText.getStylesheets().add("test.css");
         Image image = new Image("grid.jpg");
-        BackgroundSize backgroundSize = new BackgroundSize(750, 750, false, false, false, true);
+        BackgroundSize backgroundSize = new BackgroundSize(1.0,1.0, true, true, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
         Background background = new Background(backgroundImage);
         board.setBackground(background);
@@ -66,6 +71,7 @@ public class SetupView extends HBox {
         standardConfigBtn.setMaxWidth(Double.MAX_VALUE);
         exitBtn.setMaxWidth(Double.MAX_VALUE);
         this.setPadding(new Insets(10));
+        rightVBox.getChildren().addAll(unplacedUnitsLabel, listOfUnplacedUnits);
         vBox.getChildren().addAll(infoText, continueBtn, standardConfigBtn, exitBtn);
         listOfUnplacedUnits.setEditable(true);
         for (Node btn : this.board.getChildren()) {
@@ -76,7 +82,7 @@ public class SetupView extends HBox {
             GridPane.setFillWidth(btn, true);
             GridPane.setFillHeight(btn, true);
         }
-        this.getChildren().addAll(vBox, board, listOfUnplacedUnits);
+        this.getChildren().addAll(vBox, board, rightVBox);
         HBox.setHgrow(board, Priority.ALWAYS);
     }
 
@@ -86,5 +92,9 @@ public class SetupView extends HBox {
 
     protected GridPane getBoard() {
         return board;
+    }
+
+    protected Button getStandardConfigBtn() {
+        return standardConfigBtn;
     }
 }

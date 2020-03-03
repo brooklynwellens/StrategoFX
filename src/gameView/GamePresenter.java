@@ -43,9 +43,7 @@ public class GamePresenter {
                         model.selectUnit(position);
                     } else {
                         model.processMove(position);
-                        updateView();
                         model.computerMove();
-                        updateView();
                     }
                     updateView();
                 }

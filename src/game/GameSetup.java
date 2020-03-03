@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import unit.Unit;
 import unit.UnitColor;
 import unit.UnitManager;
+import unitPositionPreset.PlayerUnitPreset;
 import unitPositionPreset.UnitPlacer;
 import unitPositionPreset.UnitPlacerFactory;
 
@@ -59,12 +60,11 @@ public class GameSetup {
         return unitStartingPositions.get(position) != null;
     }
 
-    public void useUnitPreset(UnitColor unitColor, String type) {
-        UnitPlacerFactory factory = new UnitPlacerFactory();
-        UnitPlacer unitPlacer = factory.create(type, unitColor);
-        unitPlacer.placeUnits();
-        Map<Position, Unit> unitPositions = unitPlacer.getUnitPositions();
-        unitStartingPositions.putAll(unitPositions);
+    public void usePlayerUnitPreset() {
+        PlayerUnitPreset preset = new PlayerUnitPreset();
+        preset.placeUnits();
+        unitStartingPositions.putAll(preset.getUnitStartingPositions());
+        unplacedUnits.clear();
     }
 
     public Unit getPlacedUnit() {
@@ -73,6 +73,15 @@ public class GameSetup {
 
     public List<Unit> getUnplacedUnits() {
         return unplacedUnits;
+    }
+
+    public Unit getUnitAtPosition(Position source) {
+        for (Position position : unitStartingPositions.keySet()) {
+            if (source.equals(position)) {
+                return unitStartingPositions.get(position);
+            }
+        }
+        return null;
     }
 
     public boolean isSetupDone() {

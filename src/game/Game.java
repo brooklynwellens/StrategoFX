@@ -54,7 +54,6 @@ public class Game {
             Unit enemyUnit = getUnitOnTile(destination);
             processBattleResult(selectedUnit, enemyUnit);
         }
-        updateStatus();
         updateUnitVisibility();
         nextTurn();
     }
@@ -151,8 +150,8 @@ public class Game {
             Position destination = ai.choosePosition();
             if (isMoveValid(destination)) {
                 isMoveCompleted = true;
+                processMove(destination);
             }
-            processMove(destination);
         }
     }
 
