@@ -196,6 +196,17 @@ public class Game {
     public Tile[][] getGameField() {
         return board.getGameField();
     }
+
+    public void completeUnitList() {
+        UnitManager unitManager = new UnitManager();
+        List<Unit> freshUnitList = unitManager.getUnits();
+        for (Unit unitToAdd : freshUnitList) {
+            if (units.stream().noneMatch(unit -> unit.getId() == unitToAdd.getId())) {
+                unitToAdd.setCaptured();
+                units.add(unitToAdd);
+            }
+        }
+    }
 }
 
 

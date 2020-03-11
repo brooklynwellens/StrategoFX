@@ -49,19 +49,8 @@ public class GameFileManager {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        for (Unit unitToPutInMap : units) {
-            boolean isUnitInMap = false;
-            for (Unit unitInMap : unitPositionMap.values()) {
-                if (unitInMap.getId() == unitToPutInMap.getId()) {
-                    isUnitInMap = true;
-                    break;
-                }
-            }
-            if (!isUnitInMap) {
-                unitToPutInMap.setCaptured();
-                unitPositionMap.put(null, unitToPutInMap);
-            }
-        }
-        return new Game(unitPositionMap);
+        Game game = new Game(unitPositionMap);
+        game.completeUnitList();
+        return game;
     }
 }
