@@ -14,6 +14,7 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import model.unit.UnitColor;
+import view.customListCell.CustomListCell;
 import view.gameView.GamePresenter;
 import view.gameView.GameView;
 
@@ -90,23 +91,7 @@ public class SetupPresenter {
         ListView<Unit> units = view.getListOfUnplacedUnits();
         ObservableList<Unit> obsList = FXCollections.observableArrayList(model.getUnplacedUnits());
         units.setItems(obsList);
-        units.setCellFactory(param -> new ListCell<Unit>() {
-            private ImageView imageView = new ImageView();
-
-            @Override
-            public void updateItem(Unit unit, boolean empty) {
-                super.updateItem(unit, empty);
-                if (empty) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    String imagePath = (unit.getColor() + "_" + unit.getRank()).toLowerCase() + ".png";
-                    imageView.setImage(new Image(imagePath, 50, 50, false, false));
-                    setText(unit.getRank().name());
-                    setGraphic(imageView);
-                }
-            }
-        });
+        units.setCellFactory(param -> new CustomListCell());
     }
 
     public void updateBoard() {

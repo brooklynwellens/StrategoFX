@@ -1,5 +1,9 @@
 package view.gameView;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseButton;
 import model.common.Position;
 import model.exception.StrategoException;
@@ -13,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import model.unit.Unit;
 import model.unit.UnitColor;
+import view.customListCell.CustomListCell;
 
 import java.util.List;
 
@@ -84,5 +89,14 @@ public class GamePresenter {
                 }
             }
         }
+        ListView<Unit> redCapturedUnits = view.getRedCapturedUnits();
+        ObservableList<Unit> obsListRed = FXCollections.observableArrayList(model.getCapturedUnits(UnitColor.RED));
+        redCapturedUnits.setItems(obsListRed);
+        redCapturedUnits.setCellFactory(param -> new CustomListCell());
+
+        ListView<Unit> blueCapturedUnits = view.getBlueCapturedUnits();
+        ObservableList<Unit> obsListBlue = FXCollections.observableArrayList(model.getCapturedUnits(UnitColor.BLUE));
+        blueCapturedUnits.setItems(obsListBlue);
+        blueCapturedUnits.setCellFactory(param -> new CustomListCell());
     }
 }

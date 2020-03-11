@@ -1,6 +1,7 @@
 package view.gameView;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -51,7 +52,9 @@ public class GameView extends BorderPane {
             GridPane.setFillHeight(btn, true);
         }
         redCapturedUnits.setPrefHeight(50);
+        redCapturedUnits.setOrientation(Orientation.HORIZONTAL);
         blueCapturedUnits.setPrefHeight(50);
+        blueCapturedUnits.setOrientation(Orientation.HORIZONTAL);
         this.setPadding(new Insets(10));
         this.setCenter(board);
         this.setTop(blueCapturedUnits);
@@ -60,5 +63,13 @@ public class GameView extends BorderPane {
 
     protected GridPane getBoard() {
         return board;
+    }
+
+    protected ListView<Unit> getRedCapturedUnits() {
+        return redCapturedUnits;
+    }
+
+    protected ListView<Unit> getBlueCapturedUnits() {
+        return blueCapturedUnits;
     }
 }

@@ -46,11 +46,7 @@ public class Game {
     }
 
     public boolean processMove(Position destination) throws StrategoException {
-        try {
-            isMoveValid(destination);
-        } catch (StrategoException ex) {
-            throw ex;
-        }
+        isMoveValid(destination);
         currentTurn.setDestination(destination);
         board.clearTile(currentTurn.getStart());
         Unit selectedUnit = currentTurn.getSelectedUnit();
@@ -181,7 +177,7 @@ public class Game {
     }
 
     public List<Unit> getCapturedUnits(UnitColor color) {
-        return units.stream().filter(unit -> unit.isColor(color) && !unit.isCaptured()).collect(Collectors.toList());
+        return units.stream().filter(unit -> unit.isColor(color) && unit.isCaptured()).collect(Collectors.toList());
     }
 
     public List<Unit> getVisibleUnits() {
