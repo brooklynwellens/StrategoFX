@@ -4,9 +4,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import model.common.Position;
 import model.exception.StrategoException;
+import model.fileManager.GameFileManager;
 import model.game.Game;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -19,7 +23,9 @@ import model.unit.Unit;
 import model.unit.UnitColor;
 import view.customListCell.CustomListCell;
 
+import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 public class GamePresenter {
 
@@ -69,6 +75,54 @@ public class GamePresenter {
                 updateView();
             });
         }
+
+        view.getSaveBtn().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                FileChooser fileChooser = new FileChooser();
+
+                //Set extension filter for text files
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                fileChooser.getExtensionFilters().add(extFilter);
+
+                Stage saveStage = new Stage();
+
+                //Show save file dialog
+                File file = fileChooser.showSaveDialog(saveStage);
+
+                if (file != null) {
+                    try {
+                        GameFileManager.save(file.getAbsolutePath(), model);
+                    } catch (StrategoException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        view.getLoadBtn().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                FileChooser fileChooser = new FileChooser();
+
+                //Set extension filter for text files
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                fileChooser.getExtensionFilters().add(extFilter);
+
+                Stage openStage = new Stage();
+
+                //Show save file dialog
+                File file = fileChooser.showOpenDialog(openStage);
+
+                if (file != null) {
+                    Game game = GameFileManager.load(file.getAbsolutePath());
+                    GameView gameView = new GameView();
+                    GamePresenter gamePresenter = new GamePresenter(gameView, game);
+                    view.getScene().setRoot(gameView);
+                    gameView.getScene().getWindow().sizeToScene();
+                }
+            }
+        });
     }
 
     private void updateView() {

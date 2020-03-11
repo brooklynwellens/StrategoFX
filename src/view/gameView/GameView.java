@@ -15,6 +15,8 @@ public class GameView extends BorderPane {
     private GridPane board;
     private ListView<Unit> redCapturedUnits;
     private ListView<Unit> blueCapturedUnits;
+    private Button saveBtn;
+    private Button loadBtn;
 
     public GameView() {
         intialiseNodes();
@@ -33,6 +35,8 @@ public class GameView extends BorderPane {
         }
         redCapturedUnits = new ListView<>();
         blueCapturedUnits = new ListView<>();
+        saveBtn = new Button("Save Game");
+        loadBtn = new Button("Load Game");
     }
 
     private void layoutNodes() {
@@ -59,6 +63,8 @@ public class GameView extends BorderPane {
         this.setCenter(board);
         this.setTop(blueCapturedUnits);
         this.setBottom(redCapturedUnits);
+        this.setLeft(saveBtn);
+        this.setRight(loadBtn);
     }
 
     protected GridPane getBoard() {
@@ -71,5 +77,13 @@ public class GameView extends BorderPane {
 
     protected ListView<Unit> getBlueCapturedUnits() {
         return blueCapturedUnits;
+    }
+
+    protected Button getSaveBtn() {
+        return saveBtn;
+    }
+
+    protected Button getLoadBtn() {
+        return loadBtn;
     }
 }

@@ -3,6 +3,7 @@ package model.game;
 import model.battle.Battle;
 import model.ai.Ai;
 import model.battle.BattleResult;
+import model.board.Tile;
 import model.exception.StrategoException;
 import model.unit.*;
 import model.board.Board;
@@ -190,6 +191,10 @@ public class Game {
 
     public GameStatus getStatus() {
         return status;
+    }
+
+    public Tile[][] getGameField() {
+        return board.getGameField();
     }
 }
 

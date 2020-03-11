@@ -70,4 +70,8 @@ public class Board {
         }
         return new Position(-1, -1);
     }
+
+    public Tile[][] getGameField() {
+        return gameField;
+    }
 }

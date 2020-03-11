@@ -1,9 +1,6 @@
 import model.common.Position;
-import model.fileManager.UnitFileManager;
 import model.game.Game;
 import model.game.GameSetup;
-import model.unit.UnitManager;
-import model.unitPositionPreset.PlayerUnitPreset;
 import view.gameView.GamePresenter;
 import view.gameView.GameView;
 import javafx.application.Application;
@@ -15,25 +12,13 @@ import model.unit.Rank;
 import model.unit.Unit;
 import model.unit.UnitColor;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Main extends Application {
 
     public static void main(String[] args) {
         launch(args);
-        /*List<Unit> unitlist = new UnitManager().getUnits();
-        unitlist.get(1).captured();
-        UnitFileManager manager = new UnitFileManager();
-        manager.write("units", unitlist);
-        unitlist = manager.read("units", unitlist);
-        for (Unit unit : unitlist) {
-            System.out.println(unit.isCaptured());
-        }*/
     }
 
     @Override
