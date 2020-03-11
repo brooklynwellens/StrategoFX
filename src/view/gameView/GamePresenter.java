@@ -1,5 +1,6 @@
 package view.gameView;
 
+import javafx.scene.input.MouseButton;
 import model.common.Position;
 import model.exception.StrategoException;
 import model.game.Game;
@@ -33,9 +34,8 @@ public class GamePresenter {
 
     private void addEventHandlers() {
         for (Node btn : view.getBoard().getChildren()) {
-            btn.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent mouseEvent) {
+            btn.setOnMouseClicked(mouseEvent -> {
+                if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                     int x = GridPane.getColumnIndex(btn);
                     int y = GridPane.getRowIndex(btn);
                     Position position = new Position(x, y);
@@ -54,8 +54,14 @@ public class GamePresenter {
                             System.out.println(ex.getMessage());
                         }
                     }
-                    updateView();
+                } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                    try {
+                        model.unSelectUnit();
+                    } catch (StrategoException e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
+                updateView();
             });
         }
     }

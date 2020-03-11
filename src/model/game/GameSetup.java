@@ -2,6 +2,8 @@ package model.game;
 
 import model.ai.AiUnitSetup;
 import model.common.Position;
+import model.positionInitializer.IPositionInitializer;
+import model.positionInitializer.PositionInitializerFactory;
 import model.unit.Unit;
 import model.unit.UnitColor;
 import model.unit.UnitManager;
@@ -22,14 +24,11 @@ public class GameSetup {
         this.unitStartingPositions = new HashMap<>();
         AiUnitSetup aiUnitSetup = new AiUnitSetup(unitManager.getUnitsOfColor(UnitColor.RED));
         this.unitStartingPositions.putAll(aiUnitSetup.getUnitStartingPositions());
-        initializeValidPlayerPositions();
-    }
-
-    private void initializeValidPlayerPositions() {
-        for (int y = 6; y < 10; y++) {
-            for (int x = 0; x < 10; x++) {
-                unitStartingPositions.put(new Position(x, y), null);
-            }
+        PositionInitializerFactory factory = new PositionInitializerFactory();
+        IPositionInitializer initializer = factory.create(UnitColor.BLUE);
+        List<Position> startingPositions = initializer.initializePositions();
+        for (Position startingPosition : startingPositions) {
+            unitStartingPositions.put(startingPosition, null);
         }
     }
 

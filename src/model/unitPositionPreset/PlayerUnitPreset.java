@@ -30,22 +30,25 @@ public class PlayerUnitPreset {
         units = new ArrayList<>();
         units = unitManager.getUnitsOfColor(UnitColor.BLUE);
         bombs = new ArrayList<>();
-        bombs = units.stream().filter(unit -> unit.getRank() == Rank.Bomb).collect(Collectors.toList());
+        bombs = getUnitsOfRank(Rank.Bomb);
         captains = new ArrayList<>();
-        captains = units.stream().filter(unit -> unit.getRank() == Rank.Captain).collect(Collectors.toList());
+        captains = getUnitsOfRank(Rank.Captain);
         scouts = new ArrayList<>();
-        scouts = units.stream().filter(unit -> unit.getRank() == Rank.Scout).collect(Collectors.toList());
+        scouts = getUnitsOfRank(Rank.Scout);
         miners = new ArrayList<>();
-        miners = units.stream().filter(unit -> unit.getRank() == Rank.Miner).collect(Collectors.toList());
+        miners = getUnitsOfRank(Rank.Miner);
         sergeants = new ArrayList<>();
-        sergeants = units.stream().filter(unit -> unit.getRank() == Rank.Sergeant).collect(Collectors.toList());
+        sergeants = getUnitsOfRank(Rank.Sergeant);
         lieutenants = new ArrayList<>();
-        lieutenants = units.stream().filter(unit -> unit.getRank() == Rank.Lieutenant).collect(Collectors.toList());
+        lieutenants = getUnitsOfRank(Rank.Lieutenant);
         majors = new ArrayList<>();
-        majors = units.stream().filter(unit -> unit.getRank() == Rank.Major).collect(Collectors.toList());
+        majors = getUnitsOfRank(Rank.Major);
         colonels = new ArrayList<>();
-        colonels = units.stream().filter(unit -> unit.getRank() == Rank.Colonel).collect(Collectors.toList());
+        colonels = getUnitsOfRank(Rank.Colonel);
+    }
 
+    private List<Unit> getUnitsOfRank(Rank rank) {
+        return units.stream().filter(unit -> unit.getRank() == rank).collect(Collectors.toList());
     }
 
     public void placeUnits() {

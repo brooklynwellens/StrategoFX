@@ -1,7 +1,10 @@
 package model.ai;
 
 import model.common.Position;
+import model.positionInitializer.IPositionInitializer;
+import model.positionInitializer.PositionInitializerFactory;
 import model.unit.Unit;
+import model.unit.UnitColor;
 
 import java.util.*;
 
@@ -15,16 +18,13 @@ public class AiUnitSetup {
         rand = new Random();
         this.unplacedUnits = unplacedUnits;
         unitStartingPositions = new HashMap<>();
-        initializeAiStartingPositions();
-        placeUnits();
-    }
-
-    private void initializeAiStartingPositions() {
-        for (int y = 0; y < 4; y++) {
-            for (int x = 0; x < 10; x++) {
-                unitStartingPositions.put(new Position(x, y), null);
-            }
+        PositionInitializerFactory factory = new PositionInitializerFactory();
+        IPositionInitializer initializer = factory.create(UnitColor.RED);
+        List<Position> startingPositions = initializer.initializePositions();
+        for (Position startingPosition : startingPositions) {
+            unitStartingPositions.put(startingPosition, null);
         }
+        placeUnits();
     }
 
     private void placeUnits() {

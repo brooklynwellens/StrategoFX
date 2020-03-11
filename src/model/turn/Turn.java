@@ -38,10 +38,13 @@ public class Turn {
     }
 
     public void setSelectedUnit(Unit selectedUnit) throws StrategoException {
-        if (selectedUnit == null) {
+        /*if (selectedUnit == null) {
             throw new StrategoException("No friendly unit at this position");
+        }*/
+        if (selectedUnit != null && !selectedUnit.isColor(turnType)) {
+            throw new StrategoException("Not a friendly unit!");
         }
-        if (selectedUnit.isColor(turnType)) {
+        if (selectedUnit != null && selectedUnit.isColor(turnType)) {
             this.selectedUnit = selectedUnit;
         } else {
             this.selectedUnit = null;

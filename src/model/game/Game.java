@@ -41,6 +41,10 @@ public class Game {
         currentTurn.setStart(source);
     }
 
+    public void unSelectUnit() throws StrategoException {
+        currentTurn.setSelectedUnit(null);
+    }
+
     public boolean processMove(Position destination) throws StrategoException {
         try {
             isMoveValid(destination);

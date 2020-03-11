@@ -4,7 +4,7 @@ import model.unit.UnitColor;
 
 public class PositionInitializerFactory {
 
-    public PositionInitializer create(UnitColor color) {
+    public IPositionInitializer create(UnitColor color) {
         return color == UnitColor.RED ? new RedPositionInitializer() : new BluePositionInitializer();
     }
 }
