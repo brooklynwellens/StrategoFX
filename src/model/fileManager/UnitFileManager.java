@@ -1,7 +1,6 @@
 package model.fileManager;
 
 import model.unit.Unit;
-import model.unit.UnitManager;
 
 import java.io.*;
 import java.util.List;
@@ -16,7 +15,7 @@ public class UnitFileManager {
             while (scanner.hasNext()) {
                 int id = scanner.nextInt();
                 if (scanner.nextBoolean()) {
-                    unitList.stream().filter(unit1 -> unit1.getId() == id).findAny().ifPresent(Unit::captured);
+                    unitList.stream().filter(unit1 -> unit1.getId() == id).findAny().ifPresent(Unit::setCaptured);
                 }
             }
         } catch (FileNotFoundException e) {

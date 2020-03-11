@@ -1,5 +1,6 @@
 package view.setupView;
 
+import model.game.Game;
 import model.game.GameSetup;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -13,6 +14,8 @@ import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import model.unit.UnitColor;
+import view.gameView.GamePresenter;
+import view.gameView.GameView;
 
 import java.util.Optional;
 
@@ -52,7 +55,8 @@ public class SetupPresenter {
             public void handle(MouseEvent mouseEvent) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Overwrite confirmation");
-                alert.setHeaderText("Your currently placed units will be overwritten");
+                alert.setHeaderText("This setup has been used by the winner of many Stratego tournaments. Your units " +
+                        "will be overwritten and you will not be able to alter them any more.");
                 alert.setContentText("Are you sure you want to continue?");
                 Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
@@ -60,6 +64,24 @@ public class SetupPresenter {
                 }
                 updateBoard();
                 updateView();
+            }
+        });
+        Button continueBtn = view.getContinueBtn();
+        continueBtn.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Continue confirmation");
+                alert.setHeaderText("The game will start.");
+                alert.setContentText("Are you sure you want to continue?");
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    Game game = new Game(model.getUnitStartingPositions());
+                    GameView gameView = new GameView();
+                    GamePresenter gamePresenter = new GamePresenter(gameView, game);
+                    view.getScene().setRoot(gameView);
+                    gameView.getScene().getWindow().sizeToScene();
+                }
             }
         });
     }

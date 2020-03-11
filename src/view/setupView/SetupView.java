@@ -97,4 +97,8 @@ public class SetupView extends HBox {
     protected Button getStandardConfigBtn() {
         return standardConfigBtn;
     }
+
+    protected Button getContinueBtn() {
+        return continueBtn;
+    }
 }

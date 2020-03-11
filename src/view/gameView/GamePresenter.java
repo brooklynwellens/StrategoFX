@@ -1,6 +1,7 @@
 package view.gameView;
 
 import model.common.Position;
+import model.exception.StrategoException;
 import model.game.Game;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -39,11 +40,19 @@ public class GamePresenter {
                     int y = GridPane.getRowIndex(btn);
                     Position position = new Position(x, y);
                     if (model.isUnitSelected()) {
-                        if (model.processMove(position) && !model.isGameOver()) {
-                            model.computerMove();
+                        try {
+                            if (model.processMove(position) && !model.isGameOver()) {
+                                model.computerMove();
+                            }
+                        } catch (StrategoException ex) {
+                            System.out.println(ex.getMessage());
                         }
                     } else {
-                        model.selectUnit(position);
+                        try {
+                            model.selectUnit(position);
+                        } catch (StrategoException ex) {
+                            System.out.println(ex.getMessage());
+                        }
                     }
                     updateView();
                 }

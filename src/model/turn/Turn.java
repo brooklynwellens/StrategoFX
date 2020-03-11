@@ -1,6 +1,7 @@
 package model.turn;
 
 import model.common.Position;
+import model.exception.StrategoException;
 import model.unit.Unit;
 import model.unit.UnitColor;
 
@@ -36,17 +37,14 @@ public class Turn {
         return destination;
     }
 
-    public void setSelectedUnit(Unit selectedUnit) {
+    public void setSelectedUnit(Unit selectedUnit) throws StrategoException {
         if (selectedUnit == null) {
-            System.out.println("No model.unit at this position");
-            return;
+            throw new StrategoException("No friendly unit at this position");
         }
         if (selectedUnit.isColor(turnType)) {
             this.selectedUnit = selectedUnit;
-            System.out.println("Selected: " + selectedUnit);
         } else {
             this.selectedUnit = null;
-            System.out.println("Not your model.unit!");
         }
     }
 

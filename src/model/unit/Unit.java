@@ -37,7 +37,7 @@ public class Unit {
         return captured;
     }
 
-    public void captured() {
+    public void setCaptured() {
         captured = true;
     }
 

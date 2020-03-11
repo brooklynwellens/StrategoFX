@@ -12,11 +12,12 @@ import java.util.*;
 public class GameSetup {
 
     private Map<Position, Unit> unitStartingPositions;
+    private UnitManager unitManager;
     private List<Unit> unplacedUnits;
     private Unit placedUnit;
 
     public GameSetup() {
-        UnitManager unitManager = new UnitManager();
+        unitManager = new UnitManager();
         this.unplacedUnits = unitManager.getUnitsOfColor(UnitColor.BLUE);
         this.unitStartingPositions = new HashMap<>();
         AiUnitSetup aiUnitSetup = new AiUnitSetup(unitManager.getUnitsOfColor(UnitColor.RED));
@@ -58,7 +59,7 @@ public class GameSetup {
     }
 
     public void usePlayerUnitPreset() {
-        PlayerUnitPreset preset = new PlayerUnitPreset();
+        PlayerUnitPreset preset = new PlayerUnitPreset(unitManager);
         preset.placeUnits();
         unitStartingPositions.putAll(preset.getUnitStartingPositions());
         unplacedUnits.clear();
@@ -81,7 +82,7 @@ public class GameSetup {
         return null;
     }
 
-    public boolean isSetupDone() {
-        return unplacedUnits.isEmpty();
+    public Map<Position, Unit> getUnitStartingPositions() {
+        return unitStartingPositions;
     }
 }

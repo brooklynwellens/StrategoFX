@@ -3,6 +3,7 @@ package model.game;
 import model.battle.Battle;
 import model.ai.Ai;
 import model.battle.BattleResult;
+import model.exception.StrategoException;
 import model.unit.*;
 import model.board.Board;
 import model.common.Position;
@@ -16,7 +17,6 @@ public class Game {
     private ArrayList<Unit> units;
     private Board board;
     private Turn currentTurn;
-    private ArrayList<Turn> turnHistory;
     private Ai ai;
     private Map<Unit, Integer> visibleUnitsWithVisibilityCounter;
     private GameStatus status;
@@ -30,21 +30,22 @@ public class Game {
         }
         List<Unit> aiUnits = units.stream().filter(unit -> unit.isColor(UnitColor.RED)).collect(Collectors.toList());
         ai = new Ai(aiUnits);
-        turnHistory = new ArrayList<>();
         currentTurn = new Turn(UnitColor.BLUE);
         visibleUnitsWithVisibilityCounter = new HashMap<>();
         status = GameStatus.RUNNING;
     }
 
-    public void selectUnit(Position source) {
+    public void selectUnit(Position source) throws StrategoException {
         Unit selectedUnit = getUnitOnTile(source);
         currentTurn.setSelectedUnit(selectedUnit);
         currentTurn.setStart(source);
     }
 
-    public boolean processMove(Position destination) {
-        if (!isMoveValid(destination)) {
-            return false;
+    public boolean processMove(Position destination) throws StrategoException {
+        try {
+            isMoveValid(destination);
+        } catch (StrategoException ex) {
+            throw ex;
         }
         currentTurn.setDestination(destination);
         board.clearTile(currentTurn.getStart());
@@ -61,18 +62,20 @@ public class Game {
         return true;
     }
 
-    private boolean isMoveValid(Position destination) {
+    private boolean isMoveValid(Position destination) throws StrategoException {
         if (!canSelectedUnitReach(destination)) {
-            return false;
+            throw new StrategoException("Unit can't reach");
         }
         if (!board.isRouteAvailable(currentTurn.getStart(), destination)) {
-            return false;
+            throw new StrategoException("Route is blocked");
         }
         if (board.isTileOccupied(destination) && isFriendlyUnitAt(destination)) {
-            return false;
+            throw new StrategoException("Friendly unit on tile");
+
         }
         if (!board.isTileAccessible(destination)) {
-            return false;
+            throw new StrategoException("Can't move to water");
+
         }
         return true;
     }
@@ -90,7 +93,6 @@ public class Game {
     }
 
     private void nextTurn() {
-        turnHistory.add(currentTurn);
         UnitColor color = currentTurn.isType(UnitColor.BLUE) ? UnitColor.RED : UnitColor.BLUE;
         currentTurn = new Turn(color);
     }
@@ -149,11 +151,14 @@ public class Game {
         while (!isMoveCompleted) {
             Unit selectedUnit = ai.chooseUnit();
             Position source = board.getPositionById(selectedUnit.getId());
+            try {
             selectUnit(source);
             Position destination = ai.choosePosition();
-            if (isMoveValid(destination)) {
-                isMoveCompleted = true;
-                processMove(destination);
+                if (isMoveValid(destination)) {
+                    isMoveCompleted = true;
+                    processMove(destination);
+                }
+            } catch (StrategoException ignored) {
             }
         }
     }
