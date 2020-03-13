@@ -8,7 +8,6 @@ import model.game.GameResult;
 import model.game.GameStatus;
 import model.unit.UnitColor;
 
-
 public class GameResultView extends BorderPane {
 
     private VBox vBox;
@@ -31,11 +30,12 @@ public class GameResultView extends BorderPane {
     private void initialiseNodes() {
         GameStatus status = GameStatus.RUNNING;
         GameResult gameResult = new GameResult(status);
-        vBox = new VBox();
+        vBox= new VBox();
         if (gameResult.getWinner() == UnitColor.RED) {
             lblResult = new Label("You lost");
             lblMessage = new Label("The red team has won the game");
-        } else if (gameResult.getWinner() == UnitColor.BLUE) {
+        }
+        else if (gameResult.getWinner() == UnitColor.BLUE){
             lblResult = new Label("You won");
             lblMessage = new Label("Congratulations, you won!");
         }
@@ -51,4 +51,3 @@ public class GameResultView extends BorderPane {
         return btnExit;
     }
 }
-

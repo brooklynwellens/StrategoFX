@@ -1,11 +1,11 @@
-package view.customListCell;
+package view.customCellList;
 
 import javafx.scene.control.ListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import model.unit.Unit;
 
-public class CustomListCell extends ListCell<Unit> {
+public class CustomCellList extends ListCell<Unit> {
 
     private ImageView imageView = new ImageView();
 

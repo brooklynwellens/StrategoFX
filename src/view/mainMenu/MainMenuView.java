@@ -5,14 +5,17 @@ import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 
 
-public class MainMenuView extends GridPane {
+public class    MainMenuView extends GridPane {
     private Button btnStartNew;
     private Button btnPlay;
     private Button btnSettings;
     private Button btnRules;
+    private Button btnHighscores;
     private Button btnQuit;
+    private AudioClip music;
 
     public MainMenuView() {
         initialiseNodes();
@@ -20,19 +23,19 @@ public class MainMenuView extends GridPane {
     }
 
     private void layoutNodes() {
-        this.add(btnStartNew, 2, 1, 1, 1);
-        this.add(btnPlay, 2, 2, 1, 1);
-        this.add(btnSettings, 2, 3, 1, 1);
-        this.add(btnRules, 2, 4, 1, 1);
-        this.add(btnQuit, 2, 5, 1, 1);
+        this.add(btnStartNew, 2, 1, 1,1);
+        this.add(btnPlay, 2,2,1,1);
+        this.add(btnSettings, 2, 3, 1,1);
+        this.add(btnRules, 2, 4, 1,1);
+        this.add(btnQuit, 2,5, 1, 1);
         this.setAlignment(Pos.CENTER);
         this.setVgap(10);
-        this.getStylesheets().add("stratego.css");
+        this.getStylesheets().add("/stylesheets/css.css");
         this.setBackground(new Background(new BackgroundImage(new Image("stratego.png"),
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
-                new BackgroundPosition(Side.LEFT, 0, false, Side.BOTTOM, 0, false),
-                new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true, true, true))));
+                new BackgroundPosition(Side.LEFT,0,false,Side.BOTTOM,0,false),
+                new BackgroundSize(BackgroundSize.AUTO,BackgroundSize.AUTO,true,true,true,true))));
     }
 
     private void initialiseNodes() {
@@ -44,8 +47,11 @@ public class MainMenuView extends GridPane {
         btnSettings.setId("main");
         btnRules = new Button("Rules");
         btnRules.setId("main");
+        btnHighscores = new Button("Highscores");
+        btnHighscores.setId("main");
         btnQuit = new Button("Quit");
         btnQuit.setId("main");
+        music = new AudioClip(this.getClass().getResource("/files/videoplayback.m4a").toString());
 
     }
 
@@ -68,4 +74,13 @@ public class MainMenuView extends GridPane {
     public Button getBtnRules() {
         return btnRules;
     }
+
+    public Button getBtnHighscores() {
+        return btnHighscores;
+    }
+
+    public AudioClip getMusic(){
+        return music;
+    }
+
 }

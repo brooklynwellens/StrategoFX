@@ -1,6 +1,5 @@
 package view.gameResultView;
 
-import model.game.GameResult;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -13,16 +12,21 @@ import view.setupView.SetupView;
 import java.util.Set;
 
 public class GameResultPresenter {
-    private GameResult model;
+
+    private Game model;
     private GameResultView view;
 
-    public GameResultPresenter(GameResult model, GameResultView view) {
+    public GameResultPresenter(Game model, GameResultView view) {
         this.model = model;
         this.view = view;
-        addEventHandlers();
+        addEventHanddlers();
+        updateView();
     }
 
-    private void addEventHandlers() {
+    private void updateView() {
+    }
+
+    private void addEventHanddlers() {
         view.getBtnStartNew().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {

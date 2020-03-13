@@ -1,17 +1,16 @@
-package model.fileManager;
+ package model.fileManager;
 
-import model.board.Tile;
-import model.common.Position;
-import model.exception.StrategoException;
-import model.game.Game;
-import model.unit.Unit;
-import model.unit.UnitManager;
-
-import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+        import model.board.Tile;
+        import model.common.Position;
+        import model.Exception.StrategoException;
+        import model.game.Game;
+        import model.unit.Unit;
+        import model.unit.UnitManager;
+        import java.io.*;
+        import java.util.HashMap;
+        import java.util.List;
+        import java.util.Map;
+        import java.util.Scanner;
 
 public class GameFileManager {
 
@@ -31,7 +30,7 @@ public class GameFileManager {
         }
     }
 
-    static public Game load(String fileName) throws StrategoException {
+    static public Game load(String fileName) {
         UnitManager unitManager = new UnitManager();
         List<Unit> units = unitManager.getUnits();
         Map<Position, Unit> unitPositionMap = new HashMap<>();
@@ -47,9 +46,7 @@ public class GameFileManager {
                 }
             }
         } catch (FileNotFoundException e) {
-            throw new StrategoException("File not found");
-        } catch (Exception e) {
-            throw new StrategoException("Error loading file");
+            e.printStackTrace();
         }
         Game game = new Game(unitPositionMap);
         game.completeUnitList();

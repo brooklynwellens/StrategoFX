@@ -24,7 +24,7 @@ public class RulesView extends GridPane {
     }
 
     private void layoutNodes() {
-        getStylesheets().add("stratego.css");
+        getStylesheets().add("/stylesheets/css.css");
         add(titelLbl, 3, 1, 2, 1);
         add(rulesLbl, 3,2,2,1);
         add(backBtn, 3,3,3,1);
@@ -38,7 +38,6 @@ public class RulesView extends GridPane {
 
     private void initialiseNodes() {
         titelLbl = new Label("Stratego Game rules");
-        rulesLbl = new Label();
         Path bestandPath = Paths.get("resources" + File.separator + "files" + File.separator + "rules.txt");
         try {
             Scanner fileScanner = new Scanner(bestandPath);
@@ -47,7 +46,7 @@ public class RulesView extends GridPane {
                 builder.append(fileScanner.nextLine());
                 builder.append("\n");
             }
-            rulesLbl.setText(builder.toString());
+            rulesLbl = new Label(builder.toString());
         }catch (IOException ex){
             System.out.println(ex.getMessage());
         }
