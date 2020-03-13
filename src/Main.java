@@ -6,6 +6,8 @@ import view.gameView.GameView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import view.mainMenu.MainMenuPresenter;
+import view.mainMenu.MainMenuView;
 import view.setupView.SetupPresenter;
 import view.setupView.SetupView;
 import model.unit.Rank;
@@ -37,12 +39,13 @@ public class Main extends Application {
         GameView view = new GameView();
         Game model = new Game(initialUnitPositions);
         GamePresenter presenter = new GamePresenter(view, model);
+        MainMenuView mainMenuView = new MainMenuView();
+        MainMenuPresenter mainMenuPresenter = new MainMenuPresenter(mainMenuView);
 
-        Scene scene = new Scene(presenter2.getView());
+        Scene scene = new Scene(mainMenuPresenter.getView(), 1000, 1000);
         stage.setTitle("Stratego");
         stage.setScene(scene);
         stage.show();
-
-
+        
     }
 }

@@ -2,6 +2,7 @@ package view.setupView;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -44,15 +45,22 @@ public class SetupView extends HBox {
         vBox = new VBox();
         infoText = new TextArea("Welcome to the setup phase of Stratego. Place your units on the bottom 4 rows of the model.board. Units can be overwritten. A standard configuration is available. Click the next button once all your units have been placed and you want to continue.");
         continueBtn = new Button("Continue");
-        standardConfigBtn = new Button("Use model.unit preset");
+        continueBtn.getStyleClass().add("gameSetupBtn");
+        standardConfigBtn = new Button("Use unit preset");
+        standardConfigBtn.getStyleClass().add("gameSetupBtn");
         exitBtn = new Button("Exit");
+        exitBtn.getStyleClass().add("gameSetupBtn");
         rightVBox = new VBox();
         unplacedUnitsLabel = new Label("Unplaced Units");
     }
 
     private void layoutNodes() {
-        board.getStylesheets().add("test.css");
-        infoText.getStylesheets().add("test.css");
+        this.getStylesheets().add("stratego.css");
+        setBackground(new Background(new BackgroundImage(new Image("stratego.png"),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                new BackgroundPosition(Side.LEFT,0,false,Side.BOTTOM,0,false),
+                new BackgroundSize(BackgroundSize.AUTO,BackgroundSize.AUTO,true,true,true,true))));
         Image image = new Image("grid.jpg");
         BackgroundSize backgroundSize = new BackgroundSize(1.0,1.0, true, true, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);

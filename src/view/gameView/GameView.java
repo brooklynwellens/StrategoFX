@@ -3,6 +3,7 @@ package view.gameView;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
@@ -40,7 +41,12 @@ public class GameView extends BorderPane {
     }
 
     private void layoutNodes() {
-        board.getStylesheets().add("test.css");
+        board.getStylesheets().add("stratego.css");
+        this.setBackground(new Background(new BackgroundImage(new Image("stratego.png"),
+                BackgroundRepeat.NO_REPEAT,
+                BackgroundRepeat.NO_REPEAT,
+                new BackgroundPosition(Side.LEFT,0,false, Side.BOTTOM,0,false),
+                new BackgroundSize(BackgroundSize.AUTO,BackgroundSize.AUTO,true,true,true,true))));
         Image image = new Image("grid.jpg");
         BackgroundSize backgroundSize = new BackgroundSize(1.0,1.0, true, true, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);
@@ -55,6 +61,8 @@ public class GameView extends BorderPane {
             GridPane.setFillWidth(btn, true);
             GridPane.setFillHeight(btn, true);
         }
+        board.setMaxHeight(500);
+        board.setMaxWidth(500);
         redCapturedUnits.setPrefHeight(50);
         redCapturedUnits.setOrientation(Orientation.HORIZONTAL);
         blueCapturedUnits.setPrefHeight(50);

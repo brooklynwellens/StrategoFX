@@ -1,0 +1,120 @@
+#main.button{
+    -fx-min-width: 300;
+    -fx-min-height: 50;
+    -fx-background-color: black;
+    -fx-opacity: 0.9;
+    -fx-background-radius: 15;
+    -fx-text-fill: gold;
+    -fx-font-family: "Algerian", sans-serif;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-border-color: gold;
+    -fx-border-radius: 10;
+    -fx-border-width: 5;
+}
+
+#main.button:hover {
+    -fx-border-color: red;
+}
+
+#setupBtn.button{
+    -fx-min-width: 150;
+    -fx-min-height: 20;
+    -fx-background-color: black;
+    -fx-opacity: 0.9;
+    -fx-background-radius: 15;
+    -fx-text-fill: gold;
+    -fx-font-family: 'Algerian', serif;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-border-color: gold;
+    -fx-border-radius: 10;
+    -fx-border-width: 5;
+    -fx-start-margin: 10;
+}
+
+#setupBtn.button:hover {
+    -fx-border-color: red;
+}
+
+#settingsBtn.button{
+    -fx-min-width: 300;
+    -fx-min-height: 50;
+    -fx-background-color: black;
+    -fx-opacity: 0.9;
+    -fx-background-radius: 15;
+    -fx-text-fill: gold;
+    -fx-font-family: 'Algerian', serif;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-border-color: gold;
+    -fx-border-radius: 10;
+    -fx-border-width: 5;
+    -fx-padding: 20px;
+}
+
+#settingsBtn.button:hover {
+    -fx-border-color: red;
+}
+
+#settingsLbl.label{
+    -fx-text-fill: gold;
+    -fx-font-family: 'Algerian', serif;
+    -fx-font-size: 45px;
+    -fx-font-weight: bold;
+    -fx-background-color: black;
+    -fx-background-radius: 10;
+}
+
+.button {
+    -fx-background-color: transparent;
+    -fx-background-radius:0;
+    -fx-border-color:black;
+    -fx-border-width: 1 1 1 1;
+}
+
+.button:hover {
+    -fx-background-color: transparent;
+    -fx-background-radius:0;
+    -fx-border-color:lime;
+    -fx-border-width: 3 3 3 3;
+    -fx-background-insets: 0;
+}
+
+.label {
+    -fx-background-color: transparent;
+}
+
+.text-area {
+    -fx-background-color: black;
+    -fx-opacity: 0.8;
+    -fx-text-fill: white;
+}
+
+.text-area .scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.text-area .scroll-pane .viewport{
+    -fx-background-color: transparent;
+}
+
+
+.text-area .scroll-pane .content{
+    -fx-background-color: transparent;
+}
+
+#rules.label{
+    -fx-font-family: 'Algerian', Serif;
+    -fx-font-size: 14;
+    -fx-background-color: black;
+    -fx-text-fill: white;
+    -fx-opacity: 0.85;
+}
+
+#titel.label{
+    -fx-font-family: 'Algerian', Serif;
+    -fx-font-size: 32;
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+}
