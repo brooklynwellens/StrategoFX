@@ -34,6 +34,7 @@ public class SettingsPresenter {
             public void handle(MouseEvent mouseEvent) {
                 Stage stage = (Stage) view.getScene().getWindow();
                 stage.setFullScreen(true);
+                
             }
         });
 
