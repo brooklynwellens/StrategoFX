@@ -5,6 +5,7 @@ import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 
 
 public class    MainMenuView extends GridPane {
@@ -14,6 +15,7 @@ public class    MainMenuView extends GridPane {
     private Button btnRules;
     private Button btnHighscores;
     private Button btnQuit;
+    private AudioClip music;
 
     public MainMenuView() {
         initialiseNodes();
@@ -49,6 +51,7 @@ public class    MainMenuView extends GridPane {
         btnHighscores.setId("main");
         btnQuit = new Button("Quit");
         btnQuit.setId("main");
+        music = new AudioClip(this.getClass().getResource("/files/videoplayback.m4a").toString());
 
     }
 
@@ -74,6 +77,10 @@ public class    MainMenuView extends GridPane {
 
     public Button getBtnHighscores() {
         return btnHighscores;
+    }
+
+    public AudioClip getMusic(){
+        return music;
     }
 
 }

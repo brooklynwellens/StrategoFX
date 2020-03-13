@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import model.unit.Unit;
@@ -26,6 +27,7 @@ public class SetupView extends BorderPane {
     private Button exitBtn;
     private VBox rightVBox;
     private Label unplacedUnitsLabel;
+    private AudioClip music;
 
     public SetupView() {
         initialiseNodes();
@@ -123,5 +125,7 @@ public class SetupView extends BorderPane {
     protected Button getContinueBtn() {
         return continueBtn;
     }
+
+
 
 }

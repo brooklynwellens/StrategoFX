@@ -86,7 +86,7 @@ public class GameSetup {
     }
 
     public boolean isFullscreen() {
-        return isFullscreen = false;
+        return false;
     }
 
     public Map<Position, Unit> getUnitStartingPositions() {
