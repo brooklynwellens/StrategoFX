@@ -1,7 +1,6 @@
 package view.gameView;
 
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -41,11 +40,11 @@ public class GameView extends BorderPane {
     }
 
     private void layoutNodes() {
-        board.getStylesheets().add("stratego.css");
+        board.getStylesheets().add("/stylesheets/css.css");
         this.setBackground(new Background(new BackgroundImage(new Image("stratego.png"),
                 BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
-                new BackgroundPosition(Side.LEFT,0,false, Side.BOTTOM,0,false),
+                new BackgroundPosition(Side.LEFT,0,false,Side.BOTTOM,0,false),
                 new BackgroundSize(BackgroundSize.AUTO,BackgroundSize.AUTO,true,true,true,true))));
         Image image = new Image("grid.jpg");
         BackgroundSize backgroundSize = new BackgroundSize(1.0,1.0, true, true, false, false);
@@ -53,6 +52,7 @@ public class GameView extends BorderPane {
         Background background = new Background(backgroundImage);
         board.setBackground(background);
         board.setAlignment(Pos.CENTER);
+
         for (Node btn : this.board.getChildren()) {
             ((Button)btn).setMinSize(75,75);
             ((Button)btn).setMaxSize(Double.MAX_VALUE,Double.MAX_VALUE);
@@ -64,9 +64,7 @@ public class GameView extends BorderPane {
         board.setMaxHeight(500);
         board.setMaxWidth(500);
         redCapturedUnits.setPrefHeight(50);
-        redCapturedUnits.setOrientation(Orientation.HORIZONTAL);
         blueCapturedUnits.setPrefHeight(50);
-        blueCapturedUnits.setOrientation(Orientation.HORIZONTAL);
         this.setPadding(new Insets(10));
         this.setCenter(board);
         this.setTop(blueCapturedUnits);
@@ -79,19 +77,19 @@ public class GameView extends BorderPane {
         return board;
     }
 
-    protected ListView<Unit> getRedCapturedUnits() {
+    public ListView<Unit> getRedCapturedUnits() {
         return redCapturedUnits;
     }
 
-    protected ListView<Unit> getBlueCapturedUnits() {
+    public ListView<Unit> getBlueCapturedUnits() {
         return blueCapturedUnits;
     }
 
-    protected Button getSaveBtn() {
+    public Button getSaveBtn() {
         return saveBtn;
     }
 
-    protected Button getLoadBtn() {
+    public Button getLoadBtn() {
         return loadBtn;
     }
 }

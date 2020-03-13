@@ -41,20 +41,21 @@ public class Battle {
         processLoss();
     }
 
+    /*Status van de verloren model.unit verandert*/
     private void processWin() {
         this.result = BattleResult.WIN;
-        defendingUnit.setCaptured();
+        defendingUnit.captured();
     }
 
     private void processDraw() {
         this.result = BattleResult.DRAW;
-        attackingUnit.setCaptured();
-        defendingUnit.setCaptured();
+        attackingUnit.captured();
+        defendingUnit.captured();
     }
 
     private void processLoss() {
         this.result = BattleResult.LOSS;
-        attackingUnit.setCaptured();
+        attackingUnit.captured();
     }
 
     public BattleResult getResult() {

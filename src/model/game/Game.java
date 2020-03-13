@@ -1,21 +1,20 @@
 package model.game;
 
+import model.Exception.StrategoException;
 import model.battle.Battle;
 import model.ai.Ai;
 import model.battle.BattleResult;
 import model.board.Tile;
-import model.exception.StrategoException;
 import model.unit.*;
 import model.board.Board;
 import model.common.Position;
 import model.turn.Turn;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * de werking van het spel wordt hierin uitgewerkt.
- * Game is het aanspreekpunt van het model voor de presenter
+ *
  * @author LABR,WEBR
  * @version 1.12
  */
@@ -25,18 +24,16 @@ public class Game {
     private ArrayList<Unit> units;
     private Board board;
     private Turn currentTurn;
+    private ArrayList<Turn> turnHistory;
     private Ai ai;
     private Map<Unit, Integer> visibleUnitsWithVisibilityCounter;
     private GameStatus status;
 
     /**
-     * De constructor krijgt een map binnen die alle units met hun unieke posities bevat.
-     *
-     * Via deze map initialiseert de ctr al het benodigde
+     * De constructor krijgt alles binnen van de benodigde instanties.
      *
      * @param initialUnitPositions de beginplaatsen van units
      */
-
     public Game(Map<Position, Unit> initialUnitPositions) {
         board = new Board();
         units = new ArrayList<>(initialUnitPositions.values());
@@ -45,18 +42,17 @@ public class Game {
         }
         List<Unit> aiUnits = units.stream().filter(unit -> unit.isColor(UnitColor.RED)).collect(Collectors.toList());
         ai = new Ai(aiUnits);
+        turnHistory = new ArrayList<>();
         currentTurn = new Turn(UnitColor.BLUE);
         visibleUnitsWithVisibilityCounter = new HashMap<>();
         status = GameStatus.RUNNING;
     }
 
     /**
-     * Deze methode gaat de unit selecteren op de plaats waar je hebt geklikt door de unit op te halen
-     * en deze mee te geven aan de currentTurn, we slagen ook de start positie op.
+     * Deze methode gaat de unit selecteren op de plaats waar je hebt geklikt en gaat daar de source positie van maken.
      *
      * @param source de beginpositie van de geselcteerde pion
      */
-
     public void selectUnit(Position source) throws StrategoException {
         Unit selectedUnit = getUnitOnTile(source);
         currentTurn.setSelectedUnit(selectedUnit);
@@ -64,25 +60,16 @@ public class Game {
     }
 
     /**
-     * deze methode zorgt ervoor dat onze selected Unit op null komt te staan zodat we een nieuwe kunnen selecteren.
+     * Deze methode gaat de gevraagde move uitvoeren, de status van de pion updaten, de visibility v/d pion updaten en
+     * gaat de beurt doorgeven aan de andere speler.
      *
+     * @param destination de eindpositie van de geselecteerde pion
+     * @return processmove true/false
      */
-
-    public void unSelectUnit() throws StrategoException {
-        currentTurn.setSelectedUnit(null);
-    }
-
-    /**
-     * Deze methode is de kern van Game. Ze gaat de move uitvoeren en het resultaat verwerken.
-     * 1. Valideer de move
-     * 2. Verwerk de move
-     *
-     * @param destination de plaats waar de gebruiker klikt
-     * @return true/false afh of de move verwerkt is
-     */
-
-    public boolean processMove(Position destination) throws StrategoException {
-        isMoveValid(destination);
+    public boolean processMove(Position destination) {
+        if (!isMoveValid(destination)) {
+            return false;
+        }
         currentTurn.setDestination(destination);
         board.clearTile(currentTurn.getStart());
         Unit selectedUnit = currentTurn.getSelectedUnit();
@@ -99,36 +86,33 @@ public class Game {
     }
 
     /**
-     * Deze methode gaat kijken of een move uitermate wel mag gebeuren
+     * Deze methode gaat kijken of het wel aan jou is om een move te doen en of de tile wel kan gebruikt worden.
      *
-     * @param destination de plaats waar de gebruiker klikt
-     * @return true/false als de move valid is of niet
+     * @param destination de positie van de gekozen plaats op het veld
+     * @return isMoveValid true/false
      */
-
-    private boolean isMoveValid(Position destination) throws StrategoException {
+    private boolean isMoveValid(Position destination) {
         if (!canSelectedUnitReach(destination)) {
-            throw new StrategoException("Unit can't reach");
+            return false;
         }
         if (!board.isRouteAvailable(currentTurn.getStart(), destination)) {
-            throw new StrategoException("Route is blocked");
+            return false;
         }
         if (board.isTileOccupied(destination) && isFriendlyUnitAt(destination)) {
-            throw new StrategoException("Friendly unit on tile");
-
+            return false;
         }
         if (!board.isTileAccessible(destination)) {
-            throw new StrategoException("Can't move to water");
-
+            return false;
         }
         return true;
     }
 
     /**
-     * Deze methode checkt of een unit naar een positie kan stappen
-     * @param destination de plaats waar de gebruiker klikt
-     * @return boolean
+     *Deze methode gaat kijken of de geselcteerde unit wel op de plaats kan geraken die je geselcteerd hebt.
+     *
+     * @param destination de positie van de gekozen bestemming
+     * @return canSelectedUnitReach
      */
-
     private boolean canSelectedUnitReach(Position destination) {
         Unit selectedUnit = currentTurn.getSelectedUnit();
         Position start = currentTurn.getStart();
@@ -137,31 +121,32 @@ public class Game {
     }
 
     /**
-     * Dezen methode checkt of er een unit van hetzelfde team op de destination tile staat
-     * @param destination de plaats waar de gebruiker klikt
-     * @return boolean
+     * Deze methode gaat kijken als er een pion op deze positie staat of het een vriend of een vijand is.
+     *
+     * @param destination de plaats van het gekozen vak
+     * @return de unitId op de gevraagde plaats en de kleur van de unit op die plaats
      */
-
     private boolean isFriendlyUnitAt(Position destination) {
         int idOnDestination = board.getUnitIdOnTile(destination);
         return getUnitById(idOnDestination).isColor(currentTurn.getTurnType());
     }
 
     /**
-     * Deze methode zorgt ervoor dat er een nieuwe Turn wordt aangemaakt met een kleur verschillend van de vorige
+     * De beurt wordt opgeslagen in de beurtengeschiedenis en de beurt wordt dan doorgegeven aan de volgende speler.
+     *
      */
-
     private void nextTurn() {
+        turnHistory.add(currentTurn);
         UnitColor color = currentTurn.isType(UnitColor.BLUE) ? UnitColor.RED : UnitColor.BLUE;
         currentTurn = new Turn(color);
     }
 
     /**
-     * Deze methode maakt een Battle object aan en verwerkt het resultaat
-     * @param attackingUnit de aanvallende unit
-     * @param defendingUnit de verdedigende unit
+     * Deze methode gaat kijken welke pion de sterkste is en aan de hand daarvan gaat hij zeggen wat er moet gebeuren met de pionnen.
+     *
+     * @param attackingUnit de unit van de aanvaller
+     * @param defendingUnit de unit van de verdediger
      */
-
     private void processBattleResult(Unit attackingUnit, Unit defendingUnit) {
         Battle battle = new Battle(attackingUnit, defendingUnit);
         BattleResult battleResult = battle.getResult();
@@ -178,10 +163,9 @@ public class Game {
     }
 
     /**
-     * Deze methode gaat de map met visible units updaten, elke integer value krijgt -1,
-     * telkens als de value van een entry in de map 0 is wordt deze verwijderd.
+     * De methode gaat de visibility van de unit updaten.
+     *
      */
-
     private void updateUnitVisibility() {
         for (Iterator<Map.Entry<Unit, Integer>> it = visibleUnitsWithVisibilityCounter.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<Unit, Integer> entry = it.next();
@@ -194,9 +178,10 @@ public class Game {
     }
 
     /**
-     * Deze methode houdt de status van de Game bij
+     * Deze methode gaat eerst kijken wat voor soort unitvlag er geselecteerd is en gaat dan zien welke moves er nog
+     * kunnen gedaan worden.
+     *
      */
-
     private void updateStatus() {
         if (isFlagCaptured(UnitColor.RED)) {
             status = GameStatus.RED_CAPTURED;
@@ -213,137 +198,108 @@ public class Game {
     }
 
     /**
-     * Deze methode checkt of de vlag van een bepaalde kleur gecaptured is
-     * @param color de kleur van de vlag
-     * @return boolean
+     * Deze methode gaat kijken of de geselecteerde unit de vlag is van het andere team of niet.
+     *
+     * @param color de kleur van de vlag (blauw of rood)
+     * @return isFlagCaptured true/false
      */
-
     private boolean isFlagCaptured(UnitColor color) {
         return units.stream().anyMatch(unit -> unit.isColor(color) && unit.isCaptured() && unit.getRank() == Rank.Flag);
     }
 
     /**
-     * Deze methode checkt of de units van een bepaalde kleur nog kunnen bewegen
-     * @param color de kleur van de units
-     * @return boolean
+     * Deze methode gaat kijken of je nog een move kan doen.
+     *
+     * @param color de kleur van de geselecteerde pion
+     * @return
      */
-
     private boolean areMovesAvailable(UnitColor color) {
         return units.stream().anyMatch(unit -> unit.isColor(color) && !unit.isCaptured() && unit.getRank().getMovementspeed() >= 1);
     }
 
     /**
-     * Deze methode verwerkt de move van de computer die looped tot er een valid move gekozen wordt door de computer
+     * Deze methode gaat de move van de computer verwerken en uitvoeren.
+     *
      */
-
-    public void computerMove() {
+    public void computerMove() throws StrategoException {
         boolean isMoveCompleted = false;
         while (!isMoveCompleted) {
             Unit selectedUnit = ai.chooseUnit();
             Position source = board.getPositionById(selectedUnit.getId());
-            try {
             selectUnit(source);
             Position destination = ai.choosePosition();
-                if (isMoveValid(destination)) {
-                    isMoveCompleted = true;
-                    processMove(destination);
-                }
-            } catch (StrategoException ignored) {
+            if (isMoveValid(destination)) {
+                isMoveCompleted = true;
+                processMove(destination);
             }
         }
     }
 
     /**
-     * Getter om unit te gaan halen met een id
-     * @param unitId de unitId van de unit
-     * @return Unit object
+     * Deze methode gaat kijken of de gamestatus nog op bezig staat, of dat rood of blauw geen moves meer kunnen doen
+     * of één van de twee kleuren de vlag van het andere team heeft kunnen pakken.
+     *
+     * @return if game is over or not
      */
+    public boolean isGameOver() {
+        return status != GameStatus.RUNNING;
+    }
+
+    /**
+     * Deze methode gaat kijken of de geselecteerde unit wel één is van d ecurrentturn army.
+     *
+     * @return isUnitSelected true/false
+     */
+    public boolean isUnitSelected() {
+        return this.currentTurn.isUnitSelected();
+    }
+
+    /**
+     * Deze methode gaat de geselecteerde unit onselecteren.
+     * @throws StrategoException
+     */
+    public void unSelectUnit() throws StrategoException {
+        currentTurn.setSelectedUnit(null);
+    }
+
+    /**
+     * Deze methode plaatst de gevangen units in een lijst.
+     */
+    public void completeUnitList() {
+        UnitManager unitManager = new UnitManager();
+        List<Unit> freshUnitList = unitManager.getUnits();
+        for (Unit unitToAdd : freshUnitList) {
+            if (units.stream().noneMatch(unit -> unit.getId() == unitToAdd.getId())) {
+                unitToAdd.captured();
+                units.add(unitToAdd);
+            }
+        }
+    }
 
     private Unit getUnitById(int unitId) {
         return units.stream().filter(unit -> unit.getId() == unitId).findFirst().orElse(null);
     }
-
-    /**
-     * Getter om unit te gaan halen op een positie
-     * @param position de positie van de tile
-     * @return Unit object
-     */
 
     public Unit getUnitOnTile(Position position) {
         int unitId = board.getUnitIdOnTile(position);
         return getUnitById(unitId);
     }
 
-    /**
-     * Check of er een unit geselecteerd is
-     * @return boolean
-     */
-
-    public boolean isUnitSelected() {
-        return this.currentTurn.isUnitSelected();
-    }
-
-    /**
-     * Getter om de captured units van een bepaalde kleur te gaan halen
-     * @param color kleur van de units
-     * @return Lijst van units
-     */
-
     public List<Unit> getCapturedUnits(UnitColor color) {
-        return units.stream().filter(unit -> unit.isColor(color) && unit.isCaptured()).collect(Collectors.toList());
+        return units.stream().filter(unit -> unit.isColor(color) && !unit.isCaptured()).collect(Collectors.toList());
     }
-
-    /**
-     * Getter om de zichtbare units te gaan halen
-     * @return Lijst van units
-     */
 
     public List<Unit> getVisibleUnits() {
         return new ArrayList<>(visibleUnitsWithVisibilityCounter.keySet());
     }
 
-    /**
-     * Query voor presenter om te weten of het spel gedaan is
-     * @return boolean
-     */
-
-    public boolean isGameOver() {
-        return status != GameStatus.RUNNING;
-    }
-
-    /**
-     * Getter om gameStatus te gaan halen
-     * @return gameStatus
-     */
-
     public GameStatus getStatus() {
         return status;
     }
 
-    /**
-     * Getter om het gameField te gaan halen bij Board
-     * @return gameField opbject
-     */
-
-    public Tile[][] getGameField() {
+    public Tile[][] getGameField(){
         return board.getGameField();
     }
 
-    /**
-     * Methode om een onvolledige lijst van units aan te vullen.
-     * Dit wordt gebruikt bij het laden van een spel
-     */
 
-    public void completeUnitList() {
-        UnitManager unitManager = new UnitManager();
-        List<Unit> freshUnitList = unitManager.getUnits();
-        for (Unit unitToAdd : freshUnitList) {
-            if (units.stream().noneMatch(unit -> unit.getId() == unitToAdd.getId())) {
-                unitToAdd.setCaptured();
-                units.add(unitToAdd);
-            }
-        }
-    }
 }
-
-

@@ -1,4 +1,4 @@
-package model.exception;
+package model.Exception;
 
 public class StrategoException extends Exception {
     public StrategoException(String message) {
