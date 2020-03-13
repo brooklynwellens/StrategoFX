@@ -25,7 +25,7 @@ public class BoardView extends GridPane {
     }
 
     private void layoutNodes() {
-        this.getStylesheets().add("test.css");
+        this.getStylesheets().add("/stylesheets/css.css");
         Image image = new Image("grid.jpg");
         BackgroundSize backgroundSize = new BackgroundSize(1.0,1.0, true, true, false, false);
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, backgroundSize);

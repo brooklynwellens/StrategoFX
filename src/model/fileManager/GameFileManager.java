@@ -1,17 +1,16 @@
-package model.fileManager;
+ package model.fileManager;
 
-import model.board.Tile;
-import model.common.Position;
-import model.exception.StrategoException;
-import model.game.Game;
-import model.unit.Unit;
-import model.unit.UnitManager;
-
-import java.io.*;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+        import model.board.Tile;
+        import model.common.Position;
+        import model.Exception.StrategoException;
+        import model.game.Game;
+        import model.unit.Unit;
+        import model.unit.UnitManager;
+        import java.io.*;
+        import java.util.HashMap;
+        import java.util.List;
+        import java.util.Map;
+        import java.util.Scanner;
 
 public class GameFileManager {
 

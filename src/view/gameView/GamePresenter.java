@@ -2,30 +2,27 @@ package view.gameView;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.ListCell;
+import javafx.event.EventHandler;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.Exception.StrategoException;
 import model.common.Position;
-import model.exception.StrategoException;
 import model.fileManager.GameFileManager;
 import model.game.Game;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import model.unit.Unit;
 import model.unit.UnitColor;
-import view.customListCell.CustomListCell;
+import view.customCellList.CustomCellList;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 
 public class GamePresenter {
 
@@ -75,7 +72,6 @@ public class GamePresenter {
                 updateView();
             });
         }
-
         view.getSaveBtn().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -146,11 +142,11 @@ public class GamePresenter {
         ListView<Unit> redCapturedUnits = view.getRedCapturedUnits();
         ObservableList<Unit> obsListRed = FXCollections.observableArrayList(model.getCapturedUnits(UnitColor.RED));
         redCapturedUnits.setItems(obsListRed);
-        redCapturedUnits.setCellFactory(param -> new CustomListCell());
+        redCapturedUnits.setCellFactory(param -> new CustomCellList());
 
         ListView<Unit> blueCapturedUnits = view.getBlueCapturedUnits();
         ObservableList<Unit> obsListBlue = FXCollections.observableArrayList(model.getCapturedUnits(UnitColor.BLUE));
         blueCapturedUnits.setItems(obsListBlue);
-        blueCapturedUnits.setCellFactory(param -> new CustomListCell());
+        blueCapturedUnits.setCellFactory(param -> new CustomCellList());
     }
 }
