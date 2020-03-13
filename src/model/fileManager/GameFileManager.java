@@ -31,7 +31,7 @@ public class GameFileManager {
         }
     }
 
-    static public Game load(String fileName) {
+    static public Game load(String fileName) throws StrategoException {
         UnitManager unitManager = new UnitManager();
         List<Unit> units = unitManager.getUnits();
         Map<Position, Unit> unitPositionMap = new HashMap<>();
@@ -47,7 +47,9 @@ public class GameFileManager {
                 }
             }
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new StrategoException("File not found");
+        } catch (Exception e) {
+            throw new StrategoException("Error loading file");
         }
         Game game = new Game(unitPositionMap);
         game.completeUnitList();

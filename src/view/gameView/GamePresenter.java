@@ -115,7 +115,12 @@ public class GamePresenter {
                 File file = fileChooser.showOpenDialog(openStage);
 
                 if (file != null) {
-                    Game game = GameFileManager.load(file.getAbsolutePath());
+                    Game game = null;
+                    try {
+                        game = GameFileManager.load(file.getAbsolutePath());
+                    } catch (StrategoException e) {
+                        System.out.println(e.getMessage());
+                    }
                     GameView gameView = new GameView();
                     GamePresenter gamePresenter = new GamePresenter(gameView, game);
                     view.getScene().setRoot(gameView);
