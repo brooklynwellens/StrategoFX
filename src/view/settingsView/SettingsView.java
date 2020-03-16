@@ -19,7 +19,7 @@ public class SettingsView extends GridPane {
     }
 
     private void layoutNodes() {
-        getStylesheets().add("stratego.css");
+        getStylesheets().add("/stylesheets/css.css");
         add(btnFullscreen, 3,2,2,1);
         add(btnSound, 3,3,3,1);
         add(btnback,3,4,4,1);
@@ -57,3 +57,4 @@ public class SettingsView extends GridPane {
         return btnback;
     }
 }
+

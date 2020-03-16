@@ -1,4 +1,4 @@
-package view.SettingsView;
+package view.settingsView;
 
 import javafx.geometry.Pos;
 import javafx.geometry.Side;

@@ -1,24 +1,19 @@
-package view.SettingsView;
+package view.settingsView;
 
-import com.sun.tools.javac.Main;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import model.game.GameSetup;
 import view.mainMenu.MainMenuPresenter;
 import view.mainMenu.MainMenuView;
-import view.setupView.SetupView;
 
 public class SettingsPresenter {
     private GameSetup model;
-    private SettingsView view;
+    private view.settingsView.SettingsView view;
     private MainMenuView mainMenuView = new MainMenuView();
     private boolean omkeren;
 
-    public SettingsPresenter(GameSetup model, SettingsView view) {
+    public SettingsPresenter(GameSetup model, view.settingsView.SettingsView view) {
         this.model = model;
         this.view = view;
         addEventHandlers();
