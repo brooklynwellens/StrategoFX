@@ -5,14 +5,12 @@ import model.common.Position;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BluePositionInitializer implements IPositionInitializer {
+public class BluePositionInitializer implements IPositionInitializer{
 
     List<Position> positions;
 
     public BluePositionInitializer() {
-        super();
         positions = new ArrayList<>();
-        initializePositions();
     }
 
     @Override
@@ -24,5 +22,4 @@ public class BluePositionInitializer implements IPositionInitializer {
         }
         return positions;
     }
-
 }

@@ -1,4 +1,3 @@
-
 package model.unit;
 
 import model.common.Position;

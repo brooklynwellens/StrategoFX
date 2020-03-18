@@ -10,9 +10,7 @@ public class RedPositionInitializer implements IPositionInitializer {
     List<Position> positions;
 
     public RedPositionInitializer() {
-        super();
         positions = new ArrayList<>();
-        initializePositions();
     }
 
     @Override

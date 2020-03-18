@@ -2,24 +2,26 @@ package view.gameView;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import model.Exception.StrategoException;
 import model.common.Position;
+import model.exception.StrategoException;
 import model.fileManager.GameFileManager;
 import model.game.Game;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import model.game.GameResult;
 import model.unit.Unit;
 import model.unit.UnitColor;
-import view.customCellList.CustomCellList;
+import view.customListCell.CustomListCell;
+import view.gameResultView.GameResultPresenter;
+import view.gameResultView.GameResultView;
 
 import java.io.File;
 import java.util.List;
@@ -43,35 +45,33 @@ public class GamePresenter {
     private void addEventHandlers() {
         for (Node btn : view.getBoard().getChildren()) {
             btn.setOnMouseClicked(mouseEvent -> {
-                if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                    int x = GridPane.getColumnIndex(btn);
-                    int y = GridPane.getRowIndex(btn);
-                    Position position = new Position(x, y);
-                    if (model.isUnitSelected()) {
-                        try {
+                try {
+                    if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                        int x = GridPane.getColumnIndex(btn);
+                        int y = GridPane.getRowIndex(btn);
+                        Position position = new Position(x, y);
+                        if (model.isUnitSelected()) {
                             if (model.processMove(position) && !model.isGameOver()) {
                                 model.computerMove();
+                            } else if (model.isGameOver()) {
+                                GameResult result = new GameResult(model.getStatus());
+                                GameResultView view = new GameResultView();
+                                GameResultPresenter presenter = new GameResultPresenter(result, view);
+                                this.view.getScene().setRoot(view);
                             }
-                        } catch (StrategoException ex) {
-                            System.out.println(ex.getMessage());
-                        }
-                    } else {
-                        try {
+                        } else {
                             model.selectUnit(position);
-                        } catch (StrategoException ex) {
-                            System.out.println(ex.getMessage());
                         }
-                    }
-                } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
-                    try {
+                    } else if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                         model.unSelectUnit();
-                    } catch (StrategoException e) {
-                        System.out.println(e.getMessage());
                     }
+                } catch (StrategoException ex) {
+                    view.getLog().setText(ex.getMessage());
                 }
                 updateView();
             });
         }
+
         view.getSaveBtn().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
@@ -90,32 +90,24 @@ public class GamePresenter {
                     try {
                         GameFileManager.save(file.getAbsolutePath(), model);
                     } catch (StrategoException e) {
-                        e.printStackTrace();
+                        view.getLog().setText(e.getMessage());
                     }
                 }
             }
         });
 
-        view.getLoadBtn().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        view.getExitBtn().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                FileChooser fileChooser = new FileChooser();
-
-                //Set extension filter for text files
-                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
-                fileChooser.getExtensionFilters().add(extFilter);
-
-                Stage openStage = new Stage();
-
-                //Show save file dialog
-                File file = fileChooser.showOpenDialog(openStage);
-
-                if (file != null) {
-                    Game game = GameFileManager.load(file.getAbsolutePath());
-                    GameView gameView = new GameView();
-                    GamePresenter gamePresenter = new GamePresenter(gameView, game);
-                    view.getScene().setRoot(gameView);
-                    gameView.getScene().getWindow().sizeToScene();
+                Alert alert = new Alert(Alert.AlertType.NONE);
+                alert.setTitle("Exit");
+                alert.setHeaderText("Are you sure you want to exit?");
+                alert.getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+                alert.showAndWait();
+                if (alert.getResult() == ButtonType.YES) {
+                    System.exit(0);
+                } else if (alert.getResult() == ButtonType.NO) {
+                    alert.close();
                 }
             }
         });
@@ -132,21 +124,28 @@ public class GamePresenter {
                 ((Button) btn).setGraphic(null);
             } else {
                 if (selectedUnit.isColor(UnitColor.RED) && !visibleUnits.contains(selectedUnit)) {
-                    ((Button) btn).setGraphic(new ImageView(new Image("red_back.png", 50, 50, false, false)));
+                    ((Button) btn).setGraphic(new ImageView(new Image("red_back.png", 40, 40, false, false)));
                 } else {
                     String imagePath = (selectedUnit.getColor() + "_" + selectedUnit.getRank()).toLowerCase() + ".png";
-                    ((Button) btn).setGraphic(new ImageView(new Image(imagePath, 50, 50, false, false)));
+                    ((Button) btn).setGraphic(new ImageView(new Image(imagePath, 40, 40, false, false)));
                 }
             }
         }
-        ListView<Unit> redCapturedUnits = view.getRedCapturedUnits();
-        ObservableList<Unit> obsListRed = FXCollections.observableArrayList(model.getCapturedUnits(UnitColor.RED));
-        redCapturedUnits.setItems(obsListRed);
-        redCapturedUnits.setCellFactory(param -> new CustomCellList());
 
-        ListView<Unit> blueCapturedUnits = view.getBlueCapturedUnits();
-        ObservableList<Unit> obsListBlue = FXCollections.observableArrayList(model.getCapturedUnits(UnitColor.BLUE));
-        blueCapturedUnits.setItems(obsListBlue);
-        blueCapturedUnits.setCellFactory(param -> new CustomCellList());
+        List<Unit> redCapturedUnits2 = model.getCapturedUnits(UnitColor.RED);
+        view.getRedCapturedUnits().getChildren().clear();
+        for (Unit unit : redCapturedUnits2) {
+            String imagePath = (unit.getColor() + "_" + unit.getRank()).toLowerCase() + ".png";
+            ImageView imageView = new ImageView(new Image(imagePath, 50, 50, false, false));
+            view.getRedCapturedUnits().getChildren().add(imageView);
+        }
+
+        List<Unit> blueCapturedUnits2 = model.getCapturedUnits(UnitColor.BLUE);
+        view.getBlueCapturedUnits().getChildren().clear();
+        for (Unit unit : blueCapturedUnits2) {
+            String imagePath = (unit.getColor() + "_" + unit.getRank()).toLowerCase() + ".png";
+            ImageView imageView = new ImageView(new Image(imagePath, 50, 50, false, false));
+            view.getBlueCapturedUnits().getChildren().add(imageView);
+        }
     }
 }

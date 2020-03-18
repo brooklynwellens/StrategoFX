@@ -2,24 +2,22 @@ package view.rulesView;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import model.game.Game;
 import model.game.GameSetup;
 import view.mainMenu.MainMenuPresenter;
 import view.mainMenu.MainMenuView;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Scanner;
+
 public class RulesPresenter {
-    private GameSetup model;
     private RulesView view;
 
-    public RulesPresenter(GameSetup model, RulesView view) {
-        this.model = model;
+    public RulesPresenter(RulesView view) {
         this.view = view;
-        addEventHandlers();
         updateView();
-    }
-
-    private void updateView() {
-
+        addEventHandlers();
     }
 
     private void addEventHandlers() {
@@ -28,10 +26,24 @@ public class RulesPresenter {
             public void handle(MouseEvent mouseEvent) {
                 GameSetup setup = new GameSetup();
                 MainMenuView mainMenuView = new MainMenuView();
-                MainMenuPresenter presenter = new MainMenuPresenter(setup, mainMenuView);
+                MainMenuPresenter presenter = new MainMenuPresenter(mainMenuView);
                 view.getBackBtn().getScene().setRoot(mainMenuView);
             }
         });
+    }
 
+    private void updateView() {
+        Path filePath = Paths.get("src","resources", "files","rules.txt");
+        try {
+            Scanner fileScanner = new Scanner(filePath);
+            StringBuilder builder = new StringBuilder();
+            while (fileScanner.hasNext()){
+                builder.append(fileScanner.nextLine());
+                builder.append("\n");
+            }
+            view.getRulesLbl().setText(builder.toString());
+        }catch (IOException ex){
+            System.out.println(ex.getMessage());
+        }
     }
 }

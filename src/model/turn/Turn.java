@@ -1,7 +1,7 @@
 package model.turn;
 
-import model.Exception.StrategoException;
 import model.common.Position;
+import model.exception.StrategoException;
 import model.unit.Unit;
 import model.unit.UnitColor;
 
@@ -21,16 +21,16 @@ public class Turn {
         return selectedUnit;
     }
 
+    public UnitColor getTurnType() {
+        return turnType;
+    }
+
     public boolean isType(UnitColor turnType) {
         return this.turnType == turnType;
     }
 
-    public Position getStart(){
+    public Position getStart() {
         return start;
-    }
-
-    public UnitColor getTurnType(){
-        return turnType;
     }
 
     public Position getDestination() {
@@ -38,9 +38,6 @@ public class Turn {
     }
 
     public void setSelectedUnit(Unit selectedUnit) throws StrategoException {
-        /*if (selectedUnit == null) {
-            throw new StrategoException("No friendly unit at this position");
-        }*/
         if (selectedUnit != null && !selectedUnit.isColor(turnType)) {
             throw new StrategoException("Not a friendly unit!");
         }
@@ -51,15 +48,15 @@ public class Turn {
         }
     }
 
+    public void setStart(Position start) {
+        this.start = start;
+    }
+
     public void setDestination(Position destination) {
         this.destination = destination;
     }
 
     public boolean isUnitSelected() {
         return this.selectedUnit != null;
-    }
-
-    public Position setStart(Position start)  {
-        return this.start = start;
     }
 }

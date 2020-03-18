@@ -12,11 +12,11 @@ import model.unitPositionPreset.PlayerUnitPreset;
 import java.util.*;
 
 public class GameSetup {
-    private UnitManager unitManager;
+
     private Map<Position, Unit> unitStartingPositions;
+    private UnitManager unitManager;
     private List<Unit> unplacedUnits;
     private Unit placedUnit;
-    private boolean isFullscreen;
 
     public GameSetup() {
         unitManager = new UnitManager();
@@ -81,15 +81,11 @@ public class GameSetup {
         return null;
     }
 
-    public boolean isSetupDone() {
-        return unplacedUnits.isEmpty();
-    }
-
-    public boolean isFullscreen() {
-        return false;
-    }
-
     public Map<Position, Unit> getUnitStartingPositions() {
         return unitStartingPositions;
+    }
+
+    public boolean isSetupDone() {
+        return unplacedUnits.size() == 0;
     }
 }
