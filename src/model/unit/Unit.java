@@ -1,16 +1,16 @@
-package model.unit;
 
+package model.unit;
 
 import model.common.Position;
 
 public class Unit {
 
-    private static int ID = 1;
+    static int ID = 1;
 
     private final Rank rank;
     private final UnitColor color;
-    private int id;
     private boolean captured = false;
+    private int id;
 
     public Unit(Rank rank, UnitColor color) {
         this.rank = rank;
@@ -26,12 +26,20 @@ public class Unit {
         return id;
     }
 
+    public boolean isColor(UnitColor color) {
+        return this.color == color;
+    }
+
     public UnitColor getColor() {
         return color;
     }
 
-    public boolean isColor(UnitColor color) {
-        return this.color == color;
+    public boolean isCaptured() {
+        return captured;
+    }
+
+    public void setCaptured() {
+        captured = true;
     }
 
     public boolean canReach(Position distance) {
@@ -39,14 +47,6 @@ public class Unit {
     }
 
     public String toString() {
-        return String.format("%s - (%d) color: %s\n", this.rank.name(), this.rank.getStrength(),color);
-    }
-
-    public boolean isCaptured() {
-       return captured();
-    }
-
-    public boolean captured() {
-        return captured = true;
+        return String.format("%s - (%d) color: %s id: %d\n", this.rank.name(), this.rank.getStrength(),color,id);
     }
 }

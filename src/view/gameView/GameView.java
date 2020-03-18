@@ -9,7 +9,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import model.unit.Unit;
-
 public class GameView extends BorderPane {
 
     private GridPane board;
