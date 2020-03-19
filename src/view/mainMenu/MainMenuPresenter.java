@@ -61,8 +61,9 @@ public class MainMenuPresenter {
                 RulesPresenter presenter = new RulesPresenter(rulesView);
                 Stage rulesStage = new Stage();
                 rulesStage.initOwner(view.getScene().getWindow());
+                Scene scene = new Scene(rulesView, 1200, 800);
                 rulesStage.initModality(Modality.APPLICATION_MODAL);
-                rulesStage.setScene(new Scene(rulesView));
+                rulesStage.setScene(scene);
                 rulesStage.showAndWait();
 /*
                 view.getScene().setRoot(rulesView);

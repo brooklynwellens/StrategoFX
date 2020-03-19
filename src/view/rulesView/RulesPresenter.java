@@ -28,6 +28,7 @@ public class RulesPresenter {
                 MainMenuView mainMenuView = new MainMenuView();
                 MainMenuPresenter presenter = new MainMenuPresenter(mainMenuView);
                 view.getBackBtn().getScene().setRoot(mainMenuView);
+
             }
         });
     }

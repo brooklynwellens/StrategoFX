@@ -46,6 +46,5 @@ public class Main extends Application {
         stage.setTitle("Stratego");
         stage.setScene(scene);
         stage.show();
-
     }
 }
