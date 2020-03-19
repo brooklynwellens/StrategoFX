@@ -242,8 +242,8 @@ public class Game {
             Unit selectedUnit = ai.chooseUnit();
             Position source = board.getPositionById(selectedUnit.getId());
             try {
-            selectUnit(source);
-            Position destination = ai.choosePosition();
+                selectUnit(source);
+                Position destination = ai.choosePosition();
                 if (isMoveValid(destination)) {
                     isMoveCompleted = true;
                     processMove(destination);
@@ -343,6 +343,14 @@ public class Game {
             }
         }
     }
-}
 
+    /**
+     * Methode om de huidige selected unit te gaan halen bij turn
+     * @return unit object
+     */
+
+    public Unit getSelectedUnit() {
+        return this.currentTurn.getSelectedUnit();
+    }
+}
 

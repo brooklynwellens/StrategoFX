@@ -52,23 +52,23 @@ public class MainMenuView extends GridPane {
 
     }
 
-    public Button getBtnQuit() {
+    protected Button getBtnQuit() {
         return btnQuit;
     }
 
-    public Button getBtnStartNew() {
+    protected Button getBtnStartNew() {
         return btnStartNew;
     }
 
-    public Button getBtnPlay() {
+    protected Button getBtnPlay() {
         return btnPlay;
     }
 
-    public Button getBtnSettings() {
+    protected Button getBtnSettings() {
         return btnSettings;
     }
 
-    public Button getBtnRules() {
+    protected Button getBtnRules() {
         return btnRules;
     }
 

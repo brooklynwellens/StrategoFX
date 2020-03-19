@@ -12,6 +12,7 @@ public class SettingsView extends GridPane {
     private Button btnFullscreen;
     private Button btnSound;
     private Button btnback;
+    private Pane previousPane;
 
     public SettingsView(){
         initialiseNodes();

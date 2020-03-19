@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import view.mainMenu.MainMenuPresenter;
 import view.mainMenu.MainMenuView;
@@ -13,10 +14,12 @@ public class SettingsPresenter {
     private SettingsView view;
     private MainMenuView mainMenuView = new MainMenuView();
     private boolean isMusicPlaying;
+    private Pane previousPane;
 
 
-    public SettingsPresenter(SettingsView view) {
+    public SettingsPresenter(SettingsView view, Pane previousPane) {
         this.view = view;
+        this.previousPane = previousPane;
         addEventHandlers();
         updateView();
     }
@@ -42,8 +45,7 @@ public class SettingsPresenter {
         view.getBtnback().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                MainMenuPresenter presenter = new MainMenuPresenter(mainMenuView);
-                view.getBtnback().getScene().setRoot(mainMenuView);
+                view.getScene().setRoot(previousPane);
             }
         });
 
