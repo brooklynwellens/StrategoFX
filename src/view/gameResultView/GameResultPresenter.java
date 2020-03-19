@@ -67,10 +67,10 @@ public class GameResultPresenter {
         Label lblMessage = view.getLblResult();
         if (winner == UnitColor.RED) {
             lblResult.setText("You lost");
-            lblMessage.setText("The red team has won the game");
+            lblMessage.setText("The red team has won the game, try again.");
         } else if (winner == UnitColor.BLUE) {
             lblResult.setText("You won");
-            lblMessage.setText("Congratulations, you won!");
+            lblMessage.setText("Congratulations, see you next time soldier!");
         }
     }
 }

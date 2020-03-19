@@ -42,7 +42,7 @@ public class Main extends Application {
         MainMenuView mainMenuView = new MainMenuView();
         MainMenuPresenter mainMenuPresenter = new MainMenuPresenter(mainMenuView);
 
-        Scene scene = new Scene(mainMenuPresenter.getView(),1200,750);
+        Scene scene = new Scene(mainMenuPresenter.getView(),1200,800);
         stage.setTitle("Stratego");
         stage.setScene(scene);
         stage.show();
