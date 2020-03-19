@@ -1,7 +1,5 @@
 package view.gameView;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -22,7 +20,6 @@ import javafx.scene.layout.GridPane;
 import model.game.GameResult;
 import model.unit.Unit;
 import model.unit.UnitColor;
-import view.customListCell.CustomListCell;
 import view.gameResultView.GameResultPresenter;
 import view.gameResultView.GameResultView;
 import view.rulesView.RulesPresenter;

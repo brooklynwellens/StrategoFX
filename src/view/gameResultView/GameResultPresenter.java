@@ -6,15 +6,11 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
-import model.game.Game;
 import model.game.GameSetup;
-import model.game.GameStatus;
 import model.unit.UnitColor;
 import view.setupView.SetupPresenter;
 import view.setupView.SetupView;
-
 import java.util.Optional;
-import java.util.Set;
 
 public class GameResultPresenter {
     private GameResult model;

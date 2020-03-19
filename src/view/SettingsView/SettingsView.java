@@ -1,7 +1,6 @@
 package view.settingsView;
 
 import javafx.geometry.Pos;
-import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -12,7 +11,6 @@ public class SettingsView extends GridPane {
     private Button btnFullscreen;
     private Button btnSound;
     private Button btnback;
-    private Pane previousPane;
 
     public SettingsView(){
         initialiseNodes();

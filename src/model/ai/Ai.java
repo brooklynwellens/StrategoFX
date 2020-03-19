@@ -3,7 +3,6 @@ package model.ai;
 import model.common.*;
 import model.common.PositionGenerator;
 import model.unit.Unit;
-
 import java.util.List;
 import java.util.Random;
 

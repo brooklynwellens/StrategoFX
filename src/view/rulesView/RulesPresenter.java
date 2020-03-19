@@ -2,10 +2,6 @@ package view.rulesView;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import model.game.GameSetup;
-import view.mainMenu.MainMenuPresenter;
-import view.mainMenu.MainMenuView;
-
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;

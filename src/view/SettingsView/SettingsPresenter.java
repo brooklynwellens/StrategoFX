@@ -1,19 +1,15 @@
 package view.settingsView;
 
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import view.mainMenu.MainMenuPresenter;
-import view.mainMenu.MainMenuView;
+import model.fileManager.MediaPlayer;
+
 
 public class SettingsPresenter {
 
     private SettingsView view;
-    private MainMenuView mainMenuView = new MainMenuView();
-    private boolean isMusicPlaying;
     private Pane previousPane;
 
 
@@ -52,14 +48,10 @@ public class SettingsPresenter {
         view.getBtnSound().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                if (!isMusicPlaying) {
-                    MainMenuView mainMenuView = new MainMenuView();
-                    mainMenuView.getMusic().play();
-                    mainMenuView.getMusic().setCycleCount(100);
-                    isMusicPlaying = true;
-                } else {
-                    mainMenuView.getMusic().stop();
-                    isMusicPlaying = false;
+                if(MediaPlayer.isMusicPlaying()){
+                    MediaPlayer.stopMusic();
+                }else{
+                    MediaPlayer.playMusic();
                 }
             }
         });
