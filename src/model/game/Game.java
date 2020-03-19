@@ -31,7 +31,7 @@ public class Game {
 
     /**
      * De constructor krijgt een map binnen die alle units met hun unieke posities bevat.
-     *
+     * <p>
      * Via deze map initialiseert de ctr al het benodigde
      *
      * @param initialUnitPositions de beginplaatsen van units
@@ -65,7 +65,6 @@ public class Game {
 
     /**
      * deze methode zorgt ervoor dat onze selected Unit op null komt te staan zodat we een nieuwe kunnen selecteren.
-     *
      */
 
     public void unSelectUnit() throws StrategoException {
@@ -125,6 +124,7 @@ public class Game {
 
     /**
      * Deze methode checkt of een unit naar een positie kan stappen
+     *
      * @param destination de plaats waar de gebruiker klikt
      * @return boolean
      */
@@ -138,6 +138,7 @@ public class Game {
 
     /**
      * Dezen methode checkt of er een unit van hetzelfde team op de destination tile staat
+     *
      * @param destination de plaats waar de gebruiker klikt
      * @return boolean
      */
@@ -158,6 +159,7 @@ public class Game {
 
     /**
      * Deze methode maakt een Battle object aan en verwerkt het resultaat
+     *
      * @param attackingUnit de aanvallende unit
      * @param defendingUnit de verdedigende unit
      */
@@ -214,6 +216,7 @@ public class Game {
 
     /**
      * Deze methode checkt of de vlag van een bepaalde kleur gecaptured is
+     *
      * @param color de kleur van de vlag
      * @return boolean
      */
@@ -224,6 +227,7 @@ public class Game {
 
     /**
      * Deze methode checkt of de units van een bepaalde kleur nog kunnen bewegen
+     *
      * @param color de kleur van de units
      * @return boolean
      */
@@ -255,6 +259,7 @@ public class Game {
 
     /**
      * Getter om unit te gaan halen met een id
+     *
      * @param unitId de unitId van de unit
      * @return Unit object
      */
@@ -265,6 +270,7 @@ public class Game {
 
     /**
      * Getter om unit te gaan halen op een positie
+     *
      * @param position de positie van de tile
      * @return Unit object
      */
@@ -276,6 +282,7 @@ public class Game {
 
     /**
      * Check of er een unit geselecteerd is
+     *
      * @return boolean
      */
 
@@ -285,6 +292,7 @@ public class Game {
 
     /**
      * Getter om de captured units van een bepaalde kleur te gaan halen
+     *
      * @param color kleur van de units
      * @return Lijst van units
      */
@@ -295,6 +303,7 @@ public class Game {
 
     /**
      * Getter om de zichtbare units te gaan halen
+     *
      * @return Lijst van units
      */
 
@@ -304,6 +313,7 @@ public class Game {
 
     /**
      * Query voor presenter om te weten of het spel gedaan is
+     *
      * @return boolean
      */
 
@@ -313,6 +323,7 @@ public class Game {
 
     /**
      * Getter om gameStatus te gaan halen
+     *
      * @return gameStatus
      */
 
@@ -322,6 +333,7 @@ public class Game {
 
     /**
      * Getter om het gameField te gaan halen bij Board
+     *
      * @return gameField opbject
      */
 
@@ -346,11 +358,15 @@ public class Game {
 
     /**
      * Methode om de huidige selected unit te gaan halen bij turn
+     *
      * @return unit object
      */
 
     public Unit getSelectedUnit() {
         return this.currentTurn.getSelectedUnit();
     }
-}
 
+    public Position getUnitPosition(Unit unit) {
+        return board.getPositionById(unit.getId());
+    }
+}

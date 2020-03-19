@@ -3,6 +3,10 @@ import model.fileManager.MediaPlayer;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import model.game.GameResult;
+import model.game.GameStatus;
+import view.gameResultView.GameResultPresenter;
+import view.gameResultView.GameResultView;
 import view.mainMenu.MainMenuPresenter;
 import view.mainMenu.MainMenuView;
 import model.unit.Rank;
@@ -31,7 +35,12 @@ public class Main extends Application {
         MainMenuPresenter mainMenuPresenter = new MainMenuPresenter(mainMenuView);
         MediaPlayer.playMusic();
 
-        Scene scene = new Scene(mainMenuPresenter.getView(),1200,800);
+        GameResult result = new GameResult(GameStatus.BLUE_NO_MOVES);
+        GameResultView gameResultView = new GameResultView();
+        GameResultPresenter gameResultPresenter = new GameResultPresenter(result, gameResultView);
+
+       // Scene scene = new Scene(mainMenuPresenter.getView(),1200,800);
+        Scene scene = new Scene(gameResultView,1200,750);
         stage.setTitle("Stratego");
         stage.setScene(scene);
         stage.show();

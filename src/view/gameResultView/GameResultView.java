@@ -40,6 +40,9 @@ public class GameResultView extends VBox {
         Background background = new Background(backgroundImage);
         this.setBackground(background);
         this.setAlignment(Pos.CENTER);
+        lblMessage.setId("resultMessage");
+        lblResult.setId("result");
+        this.setSpacing(10);
     }
 
     protected Button getBtnStartNew() {
